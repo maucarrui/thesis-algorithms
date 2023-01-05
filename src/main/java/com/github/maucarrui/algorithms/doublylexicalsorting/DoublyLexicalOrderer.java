@@ -305,6 +305,33 @@ public class DoublyLexicalOrderer {
 	B.setSize(sizeB);
     }
     
+    /**
+     * Returns the index of a splitting row of B.
+     *
+     * A splitting row of B = (Ri, Cj) is a row r in Ri such that the row block
+     * (r, Cj) in non-constant.
+     * @param B the block to determine if it has a splitting row.
+     * @return the index of a splitting row of B, if B has no splitting row
+     *         return -1.
+     */
+    private int getSplittingRow(Block B) {
+	/* Get the indexes of the rows contained in the block. */
+	HashSet<int> rowIndexes = B.rows();
+	
+	/* Get the amount of columns contained in B. */
+	int numCols = B.columns().size();
+	
+	/* Iterate each row in Ri to determine if a block (r, Cj) is
+	 * non-constant */
+	for (int r : Ri) {
+	    if ((B.getRowSize(r) > 0) && (B.getRowSize(r) < numCols)) {
+		return r;
+	    }
+	}
+	
+	/* If all row blocks are constant, there is no splitting row. */
+	return -1;
+    }
 	}
 
     }
