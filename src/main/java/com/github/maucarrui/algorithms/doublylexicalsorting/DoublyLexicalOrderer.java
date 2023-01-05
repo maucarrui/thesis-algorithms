@@ -389,7 +389,94 @@ public class DoublyLexicalOrderer {
 	return rowRefinement;
     }
     
+    /**
+     * Produce the blocks obtained by performing a column refinement.
+     * @param colRef the column refinement.
+     * @param B the current block.
+     * @return the new current block.
+     */
+    private Block produceColumnRefinement([]HashSet<int> colRef, Block B) {
+	/* Get the left and right refinement */
+	HashSet<int> lRef = colRef[0];
+	HashSet<int> rRef = colRef[1];
+	
+	/* Determine which parts are smaller and bigger. */
+	HashSet<int> sRef, bRef;
+	bool leftSmaller = (lRef.size() <= rRef().size());
+
+	if (leftSmaller) {
+	    sRef = lRef;
+	    bRef = rRef;
+	} else {
+	    sRef = rRef;
+	    bRef = bRef;
 	}
 
+	/* Produce all the blocks obtained by the column refinement. */
+	Block current = B;
+	Block ogLeft    = null;
+	Block ogRight   = null;
+	Block prevLeft  = null;
+	Block prevRight = null;
+	
+	do {
+	    /* Get the current block's row part. */
+	    HashSet<int> Ri = current.rows();
+
+	    Block smallBlock = new Block(Ri, sRef);
+	    Block bigBlock   = new Block(Ri, bRef);
+
+	    /* Determine the smaller block's size. */
+	    determineSize(smallBlock);
+
+	    /* Use the previous information to determine the bigger block's size. */
+	    int sizeBig = 0;
+	    for (int r : Ri) {
+		int currentRowSize = current.getRowSize(r);
+		int smallRowSize   = smallBlock.getRowSize(r);
+		int bigRowSize     = currentRowSize - smallRowSize;
+		
+		bigBlock.setRowSize(r, bigRowSize);
+		
+		sizeBig += bigRowSize;
+	    }
+	    
+	    bigBlock.setSize(sizeBig);
+	    
+	    /* Determine which block is on the left and right. */
+	    Block leftBlock, rightBlock;
+	    if (leftSmaller) {
+		leftBlock  = smallBlock;
+		rightBlock = bigBlock;
+	    } else {
+		leftBlock  = bigBlock;
+		rightBlock = smallBlock;
+	    }
+	    
+	    /* Adjust the blocks' pointers. */
+	    leftBlock.setRight(rightBlock);
+	    rightBlock.setRight(current.getRight());
+		
+	    if (prevLeft == null) {
+		ogLeft  = smallBlock;
+		ogRight = bigBlock;
+	    } else {
+		prevLeft.setBelow(leftBlock);
+		prevLeft.setNext(leftBlock);
+		prevRight.setBelow(rightBlock);
+		prevRight.setNext(rightBlock);
+	    }
+	    
+	    /* Move to the next block below, if there is no such block, exit the
+	     * loop. */
+	    if (current.hasBelow()) {
+		current = current.getBelow();
+	    } else {
+		leftBlock.setNext(ogRight);
+		rightBlock.setNext(current.getNext());
+		break;
+	    }
+
+	} while (true);
     }
 }
