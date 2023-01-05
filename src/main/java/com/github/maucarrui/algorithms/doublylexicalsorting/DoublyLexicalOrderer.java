@@ -52,9 +52,14 @@ public class DoublyLexicalOrderer {
 	private Block below;
 
 	/**
-	 * The block B' that goes next to B.
+	 * The block B' that goes after B.
 	 */
 	private Block next;
+
+	/**
+	 * The block B' that goes before B.
+	 */
+	private Block previous;
 
 	/** Indicates if the block is the rightmost block. */
 	private bool isRightmost;
@@ -68,10 +73,16 @@ public class DoublyLexicalOrderer {
 	 * @param Ri the row part of the block.
 	 * @param Cj the column part of the block.
 	 */
-	public Block(set<int> Ri, Cj) {
+	public Block(HashSet<int> Ri, HashSet<int> Cj) {
 	    this.rows = rows;
 	    this.columns = columns;
 	    this.size = 0;
+	    this.rowSize = new HashMap<int, int>();
+	    this.right = null;
+	    this.below = null;
+	    this.next = null;
+	    this.isRightmost = false;
+	    this.isBottom = false;
 	}
 
 	/**
@@ -155,6 +166,14 @@ public class DoublyLexicalOrderer {
 	}
 
 	/**
+	 * Indicates which block is before.
+	 * @param next the block that's before.
+	 */
+	public void setPrevious(Block previous) {
+	    this.previous = previous;
+	}
+
+	/**
 	 * Returns the block to the right.
 	 * @return the block to the right.
 	 */
@@ -179,6 +198,14 @@ public class DoublyLexicalOrderer {
 	}
 
 	/**
+	 * Returns the block that's before.
+	 * @return the block that's before.
+	 */
+	public Block getPrevious() {
+	    return this.previous;
+	}
+
+	/**
 	 * Sets the current block as the rightmost.
 	 */
 	public void setAsRightmost() {
@@ -193,37 +220,39 @@ public class DoublyLexicalOrderer {
 	}
 
 	/**
-	 * Indicates if the current block is the rightmost.
-	 * @return true if the current block is the rightmost, false otherwise.
+	 * Returns if the current block has a block below.
+	 * @return true if the current block has a block below, false otherwise.
 	 */
-	public bool isRightmost() {
-	    return this.isRightmost;
+	public bool hasBelow() {
+	    return (this.below != null);
 	}
 
 	/**
-	 * Indicates if the current block is at the bottom.
-	 * @return true if the current block is at the bottom, false otherwise.
+	 * Returns if the current block has a block right to it.
+	 * @return true if the current block has a block to the right, false
+	 *         otherwise.
 	 */
-	public bool isBottom() {
-	    return this.bottom;
+	public bool hasRight() {
+	    return (this.right != null);
 	}
 
-	/** The ordered row partition. */
-	LinkedList<HashSet<int>> orderedRowPartition;
-
-	/** The ordered column partition. */
-	LinkedList<HashSet<int>> orderedColumnPartition;
-
-	/** The original matrix */
-	int[][] original;
+	/**
+	 * Returns if the current block has a next block.
+	 * @return true if the current block has a next block, false otherwise.
+	 */
+	public bool hasNext() {
+	    return (this.next != null);
+	}
 
 	/**
-	 * Unique constructor for a Doubly Lexical Orderer that receives the
-	 * matrix to be ordered.
-	 * @param matrix the matrix to be ordered.
+	 * Returns if the current block has a previous block.
+	 * @return true if the current block has a previous block, false
+	 *         otherwise.
 	 */
-	public DoublyLexicalOrderer(int[][] matrix) {
-	    this.original = matrix;
+	public bool hasPrevious() {
+	    return (this.previous != null);
+	}
+    }
 	}
 
     }
