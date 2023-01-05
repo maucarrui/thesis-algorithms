@@ -274,6 +274,37 @@ public class DoublyLexicalOrderer {
 	this.orderedRowPartition = new LinkedList<HashSet<int>>();
 	this.orderedColumnPartition = new LinkedList<HashSet<int>>();
     }
+
+    /**
+     * Determines the size of a block, it also defines the size of each row
+     * block.
+     * @param B the block to determine its size.
+     */
+    private void determineSize(Block B) {
+	/* Get the rows and columns of the block. */
+	HashSet<int> Ri = B.rows();
+	HashSet<int> Cj = B.columns();
+	
+	/* B's size.*/
+	int sizeB = 0;
+	
+	/* Iterate each row in Ri and determine the size of (r, Cj). */
+	for (int r : Ri) {
+	    /* (r, Cj)'s size. */
+	    int sizeR = 0;
+	    
+	    for (int c : Cj) {
+		sizeR += this.original[r][c];
+	    }
+	    
+	    B.setRowSize(r, sizeR);
+	    
+	    sizeB += sizeR;
+	}
+	
+	B.setSize(sizeB);
+    }
+    
 	}
 
     }
