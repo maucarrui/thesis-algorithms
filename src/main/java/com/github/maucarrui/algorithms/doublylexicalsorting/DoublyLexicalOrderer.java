@@ -332,6 +332,35 @@ public class DoublyLexicalOrderer {
 	/* If all row blocks are constant, there is no splitting row. */
 	return -1;
     }
+    
+    /**
+     * Defines a column refinement. Given a row r, the first set of columns
+     * contains all the non-zero entries, the second set of columns contains all
+     * the zero entries.
+     * @param row the row for which the column refinement will be defined.
+     * @param Cj the original columns set.
+     * @return a column refinement of original columns set.
+     */
+    private []HashSet<int> getColumnRefinement(int row, HashSet<int> Cj) {
+	/* Define a column refinement as an array of sets. */
+	[]HashSet<int> columnRefinement = new HashSet<int>[2];
+	columnRefinement[0] = new HashSet<int>();
+	columnRefinement[1] = new HashSet<int>();
+	
+	// Iterate through the columns contained in the set Cj.
+	for (int col : Cj) {
+	    // If the entry M[r][c] is 1, add it to the first set.
+	    if (this.original[row][col] == 1) {
+		columnRefinement[0].add(col);
+	    } else {
+		// Otherwise, add it to the second set.
+		columnRefinement[1].add(col);
+	    }
+	}
+	
+	return columnRefinement;
+    }
+
 	}
 
     }
