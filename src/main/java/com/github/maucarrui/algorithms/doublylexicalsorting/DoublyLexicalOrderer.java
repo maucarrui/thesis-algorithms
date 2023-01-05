@@ -478,5 +478,8 @@ public class DoublyLexicalOrderer {
 	    }
 
 	} while (true);
+	
+	/* Return the new block we're standing on. */
+	return ogLeft;
     }
 }
