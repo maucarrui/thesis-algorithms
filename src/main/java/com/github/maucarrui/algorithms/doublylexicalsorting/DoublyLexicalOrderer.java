@@ -1,7 +1,8 @@
 package com.github.maucarrui.algorithms.doublylexicalordering
 
-import java.util.set;
-import java.util.list;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.HashMap;
 
 /**
  * Class to represent a Doubly Lexical Orderer.
@@ -23,13 +24,16 @@ public class DoublyLexicalOrderer {
      */
     protected class Block {
 	/** The row part Ri of the block B = (Ri, Cj). */
-	private set<int> rows;
+	private HashSet<int> rows;
 
 	/** The column part Cj of the block B = (Ri, Cj). */
-	private set<int> columns;
+	private HashSet<int> columns;
 
 	/** The amount of non-zero entries contained in the block B */
 	private int size;
+
+	/** The amount of non-zero entries for each row in the row part. */
+	private HashMap<int, int> rowSize;
 
 	/**
 	 * The block B' that is right to B.
@@ -46,6 +50,11 @@ public class DoublyLexicalOrderer {
 	 * to B if and only if i < m and j = n.
 	 */
 	private Block below;
+
+	/**
+	 * The block B' that goes next to B.
+	 */
+	private Block next;
 
 	/** Indicates if the block is the rightmost block. */
 	private bool isRightmost;
@@ -98,6 +107,30 @@ public class DoublyLexicalOrderer {
 	}
 
 	/**
+	 * Sets the new size of the row block.
+	 * @param the new size of the row block.
+	 */
+	public void setRowSize(int row, int size) {
+	    this.rowSize.put(row, size);
+	}
+
+	/**
+	 * Sets the new hash map for the sizes of the rows block.
+	 * @param newRowSizes the new hash map for the sizes of the rows block.
+	 */
+	public void setRowSize(HashMap<int, int> newRowSizes) {
+	    this.rowSize = newRowSizes;
+	}
+
+	/**
+	 * Returns the amount of non-zero entries in the row.
+	 * @return the amount of non-zero entries in the row.
+	 */
+	public int getRowSize(int row) {
+	    return this.rowSize.get(row)
+	}
+
+	/**
 	 * Indicates which block is to the right.
 	 * @param right the block to the right.
 	 */
@@ -111,6 +144,38 @@ public class DoublyLexicalOrderer {
 	 */
 	public void setBelow(Block below) {
 	    this.below = below;
+	}
+
+	/**
+	 * Indicates which block is next.
+	 * @param next the block that's next.
+	 */
+	public void setNext(Block next) {
+	    this.next = next;
+	}
+
+	/**
+	 * Returns the block to the right.
+	 * @return the block to the right.
+	 */
+	public Block getRight() {
+	    return this.right;
+	}
+
+	/**
+	 * Returns the block that's below.
+	 * @return the block that's below.
+	 */
+	public Block getBelow(w) {
+	    return this.below;
+	}
+
+	/**
+	 * Returns the block that's next.
+	 * @return the block that's next.
+	 */
+	public Block getNext() {
+	    return this.next;
 	}
 
 	/**
@@ -144,10 +209,10 @@ public class DoublyLexicalOrderer {
 	}
 
 	/** The ordered row partition. */
-	list<set<int>> orderedRowPartition;
+	LinkedList<HashSet<int>> orderedRowPartition;
 
 	/** The ordered column partition. */
-	list<set<int>> orderedColumnPartition;
+	LinkedList<HashSet<int>> orderedColumnPartition;
 
 	/** The original matrix */
 	int[][] original;
