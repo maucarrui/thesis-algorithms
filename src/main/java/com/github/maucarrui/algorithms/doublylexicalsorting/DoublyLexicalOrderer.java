@@ -458,8 +458,8 @@ public class DoublyLexicalOrderer {
 	    rightBlock.setRight(current.getRight());
 		
 	    if (prevLeft == null) {
-		ogLeft  = smallBlock;
-		ogRight = bigBlock;
+		ogLeft  = leftBlock;
+		ogRight = rightBlock;
 	    } else {
 		prevLeft.setBelow(leftBlock);
 		prevLeft.setNext(leftBlock);
