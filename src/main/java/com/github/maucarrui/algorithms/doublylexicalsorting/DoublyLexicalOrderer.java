@@ -253,6 +253,27 @@ public class DoublyLexicalOrderer {
 	    return (this.previous != null);
 	}
     }
+
+
+    /** The ordered row partition. */
+    LinkedList<HashSet<int>> orderedRowPartition;
+    
+    /** The ordered column partition. */
+    LinkedList<HashSet<int>> orderedColumnPartition;
+    
+    /** The original matrix */
+    int[][] original;
+    
+    /**
+     * Unique constructor for a Doubly Lexical Orderer that receives the
+     * matrix to be ordered.
+     * @param matrix the matrix to be ordered.
+     */
+    public DoublyLexicalOrderer(int[][] matrix) {
+	this.original = matrix;
+	this.orderedRowPartition = new LinkedList<HashSet<int>>();
+	this.orderedColumnPartition = new LinkedList<HashSet<int>>();
+    }
 	}
 
     }
