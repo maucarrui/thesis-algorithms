@@ -398,12 +398,105 @@ public class DoublyLexicalOrderer {
 
 	return orderedCols;
     }
+    
+    /**
+     * Builds the ordered matrix with the order specified by the ordered sets.
+     * @param orderedRows the ordered rows.
+     * @param orderedCols the ordered columns.
+     * @return the ordered matrix
+     */
+    private int[][] buildOrderedMatrix(int[] orderedRows, int[] orderedCols) {
+	/* The size of the original matrix */
+	int n = this.original.length;
+
+	int[][] ordered = new int[n][n];
+	
+	int i, j;
+	i = 0;
+	for (int r : orderedRows) {
+	    j = 0;
+	    for (int c : orderedCols) {
+		ordered[i][j] = this.original[r][c];
+	    }
+	}
+	
+	return ordered;
+    }
 
     /**
      * Returns a doubly lexicographical ordering of the original matrix.
      * @return a doubly lexicographical ordering of the original matrix.
      */
     public int[][] getOrderedMatrix() {
-	return this.original;
+	/* Get the size of the original matrix */
+	int n = this.original.length;
+	
+	/* Define the intial set of rows and columns indexes */
+	HashSet<Integer> R = new HashSet<Integer>();
+	HashSet<Integer> C = new HashSet<Integer>();
+	for (int i = 0; i < n; i++) {
+	    R.add(i);
+	    C.add(i);
+	}
+	
+	/* Add R and C to the ordered partitions */
+	orderedRowPartition.add(R);
+	orderedColumnPartition.add(C);
+	
+	/* Define the initial block and determine its size */
+	Block B = new Block(R, C);
+	determineSize(B);
+	
+	/* Amongst the blocks formed by the current ordered row and column
+	 * partitions, obtain the non-constant block B for which all blocks
+	 * above an to the left are constant and define a row or column
+	 * refinement. */
+	while (B != null) {
+	    if (B.isConstant()) {
+		/* If B is constant, there is nothing to do, move to the next
+		 * block. */
+		B = B.getNext();
+	    } else {
+		/* If B is non-constant, then it has a splitting row or
+		 * column */
+		int splitRow = getSplittingRow(B);
+		
+		if (splitRow != -1) {
+		    /* If B has a splitting row, produce a column refinement. */
+		    HashSet<Integer> Cj = B.columns();
+		    Refinement colRef = getColumnRefinement(splitRow, Cj);
+		    B = produceColumnRefinement(colRef, B);
+		    
+		    /* Replace Cj by its refinement in the ordered partition. */
+		    int j = orderedColumnPartition.indexOf(Cj);
+		    orderedColumnPartition.remove(j);
+		    orderedColumnPartition.add(j, colRef.getLeft());
+		    orderedColumnPartition.add(j + 1, colRef.getRight());
+		} else {
+		    /* If B has no splitting row, produce a row refinement. */
+		    HashSet<Integer> Ri = B.rows();
+		    /* Get a random column. */
+		    int col = -1;
+		    for (int c : B.columns()) {
+			col = c;
+			break;
+		    }
+		    Refinement rowRef = getRowRefinement(col, B.rows());
+		    B = produceRowRefinement(rowRef, B);
+
+		    /* Replace Ri by its refinement in the ordered partition. */
+		    int i = orderedRowPartition.indexOf(Ri);
+		    orderedRowPartition.remove(i);
+		    orderedRowPartition.add(i, rowRef.getLeft());
+		    orderedRowPartition.add(i + 1, rowRef.getRight());
+		}
+	    }
+	}
+	
+	/* Build the ordered matrix defined by the ordered partition. */
+	int[] orderedRows = getOrderedRows();
+	int[] orderedCols = getOrderedColumns();
+
+	return buildOrderedMatrix(orderedRows, orderedCols);
     }
 }
