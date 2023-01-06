@@ -480,4 +480,110 @@ public class DoublyLexicalOrderer {
 	/* Return the new block we're standing on. */
 	return ogLeft;
     }
+
+    /**
+     * Produce the blocks obtained by performing a row refinement.
+     * @param rowRef the row refinement.
+     * @param B the current block.
+     * @return the new current block.
+     */
+    private Block produceRowRefinement([]HashSet<int> rowRef, Block B) {
+	/* Get the left and right refinement */
+	HashSet<int> lRef = rowRef[0];
+	HashSet<int> rRef = rowRef[1];
+
+	/* Determine which parts are smaller and bigger. */
+	HashSet<int> sRef, bRef;
+	bool leftSmaller = (lRef.size() <= rRef().size());
+
+	if (leftSmaller) {
+	    sRef = lRef;
+	    bRef = rRef;
+	} else {
+	    sRef = rRef;
+	    bRef = bRef;
+	}
+
+	/* Produce all the blocks obtained by the column refinement. */
+	Block current = B;
+	Block ogTop   = null;
+	Block ogBot   = null;
+	Block prevTop = null;
+	Block prevBot = null;
+
+	do {
+	    /* Get the current block's column part. */
+	    HashSet<int> Cj = current.columns();
+
+	    Block smallBlock = new Block(sRef, Cj);
+	    Block bigBlock   = new Block(bRef, Cj);
+
+	    /* Determine the smaller block's size. */
+	    HashMap<int, int> currentRowMap = current.getRowSizeMap();
+	    int sizeSmall = 0;
+	    for (int r : sRef) {
+		rowBlockSize = currentRowMap.get(r);
+		smallBlock.setRowSize(rowBlockSize);
+		sizeSmall += rowBlockSize;
+		
+		/* Remove the appended row of the current map. */
+		currentRowMap.remove(r);
+	    }
+	    smallBlock.setSize(sizeSmall);
+
+	    /* Use the previous information to determine the bigger block's size. */
+	    int sizeBig = current.getSize() - sizeSmall;
+	    bigBlock.setSize(sizeBig);
+	    bigBlock.setRowSizeMap(currentRowMap);
+
+	    /* Determine which block is on the top and bot. */
+	    Block topBlock, botBlock;
+	    if (leftSmaller) {
+		topBlock  = smallBlock;
+		botBlock = bigBlock;
+	    } else {
+		topBlock  = bigBlock;
+		botBlock = smallBlock;
+	    }
+
+	    /* Adjust the blocks' pointers. */
+	    topBlock.setBelow(botBlock);
+	    topBlock.setNext(botBlock);
+	    botBlock.setPrevious(topBlock);
+	    botBlock.setBelow(current.getBelow());
+	    botBlock.setNext(current.getNext());
+	    
+	    if (current.hasNext()) {
+		current.getNext().setPrevious(botBlock);
+	    }
+
+	    if (current.hasPrevious()) {
+		current.getPrevious().setNext(topBlock);
+	    }
+
+	    if (prevTop == null) {
+		ogTop = topBlock;
+		ogBot = botBlock;
+	    } else {
+		prevTop.setRight(topBlock);
+		prevBot.setRight(botBlock);
+	    }
+
+	    /* The current blocks become the previous. */
+	    prevLeft  = leftBlock;
+	    prevRight = rightBlock;
+
+	    /* Move to the next block to the right, if there is no such block,
+	     * exit the loop. */
+	    if (current.hasRight()) {
+		current = current.getRight();
+	    } else {
+		break;
+	    }
+
+	} while (true);
+
+	/* Return the new block we're standing on. */
+	return ogTop;
+    }
 }
