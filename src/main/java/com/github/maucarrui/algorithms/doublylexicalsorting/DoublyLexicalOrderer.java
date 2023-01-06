@@ -61,12 +61,6 @@ public class DoublyLexicalOrderer {
 	 */
 	private Block previous;
 
-	/** Indicates if the block is the rightmost block. */
-	private bool isRightmost;
-
-	/** Indicates if the block is the bottom block. */
-	private bool isBottom;
-
 	/**
 	 * Unique constructor which receives the row part Ri, and the column
 	 * part Cj that define the block B = (Ri, Cj).
@@ -81,6 +75,7 @@ public class DoublyLexicalOrderer {
 	    this.right = null;
 	    this.below = null;
 	    this.next = null;
+	    this.previous = null;
 	    this.isRightmost = false;
 	    this.isBottom = false;
 	}
@@ -129,7 +124,7 @@ public class DoublyLexicalOrderer {
 	 * Sets the new hash map for the sizes of the rows block.
 	 * @param newRowSizes the new hash map for the sizes of the rows block.
 	 */
-	public void setRowSize(HashMap<int, int> newRowSizes) {
+	public void setRowSizeMap(HashMap<int, int> newRowSizes) {
 	    this.rowSize = newRowSizes;
 	}
 
@@ -138,7 +133,15 @@ public class DoublyLexicalOrderer {
 	 * @return the amount of non-zero entries in the row.
 	 */
 	public int getRowSize(int row) {
-	    return this.rowSize.get(row)
+	    return this.rowSize.get(row);
+	}
+
+	/**
+	 * Returns the row size mapping.
+	 * @return the row size mapping.
+	 */
+	public HashMap<int, int> getRowSizeMap() {
+	    return this.rowSize;
 	}
 
 	/**
@@ -203,20 +206,6 @@ public class DoublyLexicalOrderer {
 	 */
 	public Block getPrevious() {
 	    return this.previous;
-	}
-
-	/**
-	 * Sets the current block as the rightmost.
-	 */
-	public void setAsRightmost() {
-	    this.isRightmost = true;
-	}
-
-	/**
-	 * Sets the current block as the bottom.
-	 */
-	public void setAsRightmost() {
-	    this.isBottom = true;
 	}
 
 	/**
