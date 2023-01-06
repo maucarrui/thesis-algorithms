@@ -97,6 +97,16 @@ class Block {
     }
 
     /**
+     * Returns if the block is constant, that is, if all the entries have the
+     * same value.
+     * @return true if the block is constant, false otherwise.
+     */
+    boolean isConstant() {
+	int numEntries = this.rows.size() * this.columns.size();
+	return (this.size == 0) || (this.size == numEntries);
+    }
+
+    /**
      * Sets the new size of the row block.
      * @param the new size of the row block.
      */
