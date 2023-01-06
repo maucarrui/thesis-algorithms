@@ -1,4 +1,4 @@
-package com.github.maucarrui.algorithms.doublylexicalordering
+package com.github.maucarrui.algorithms.doublylexicalordering;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -24,16 +24,16 @@ public class DoublyLexicalOrderer {
      */
     protected class Block {
 	/** The row part Ri of the block B = (Ri, Cj). */
-	private HashSet<int> rows;
+	private HashSet<Integer> rows;
 
 	/** The column part Cj of the block B = (Ri, Cj). */
-	private HashSet<int> columns;
+	private HashSet<Integer> columns;
 
 	/** The amount of non-zero entries contained in the block B */
 	private int size;
 
 	/** The amount of non-zero entries for each row in the row part. */
-	private HashMap<int, int> rowSize;
+	private HashMap<Integer, Integer> rowSize;
 
 	/**
 	 * The block B' that is right to B.
@@ -67,24 +67,22 @@ public class DoublyLexicalOrderer {
 	 * @param Ri the row part of the block.
 	 * @param Cj the column part of the block.
 	 */
-	public Block(HashSet<int> Ri, HashSet<int> Cj) {
+	public Block(HashSet<Integer> Ri, HashSet<Integer> Cj) {
 	    this.rows = rows;
 	    this.columns = columns;
 	    this.size = 0;
-	    this.rowSize = new HashMap<int, int>();
+	    this.rowSize = new HashMap<Integer, Integer>();
 	    this.right = null;
 	    this.below = null;
 	    this.next = null;
 	    this.previous = null;
-	    this.isRightmost = false;
-	    this.isBottom = false;
 	}
 
 	/**
 	 * Returns the row part of the block.
 	 * @return the row part of the block.
 	 */
-	public set<int> rows() {
+	public HashSet<Integer> rows() {
 	    return this.rows;
 	}
 
@@ -92,7 +90,7 @@ public class DoublyLexicalOrderer {
 	 * Returns the column part of the block.
 	 * @return the column part of the block.
 	 */
-	public set<int> columns() {
+	public HashSet<Integer> columns() {
 	    return this.columns;
 	}
 
@@ -124,7 +122,7 @@ public class DoublyLexicalOrderer {
 	 * Sets the new hash map for the sizes of the rows block.
 	 * @param newRowSizes the new hash map for the sizes of the rows block.
 	 */
-	public void setRowSizeMap(HashMap<int, int> newRowSizes) {
+	public void setRowSizeMap(HashMap<Integer, Integer> newRowSizes) {
 	    this.rowSize = newRowSizes;
 	}
 
@@ -140,7 +138,7 @@ public class DoublyLexicalOrderer {
 	 * Returns the row size mapping.
 	 * @return the row size mapping.
 	 */
-	public HashMap<int, int> getRowSizeMap() {
+	public HashMap<Integer, Integer> getRowSizeMap() {
 	    return this.rowSize;
 	}
 
@@ -188,7 +186,7 @@ public class DoublyLexicalOrderer {
 	 * Returns the block that's below.
 	 * @return the block that's below.
 	 */
-	public Block getBelow(w) {
+	public Block getBelow() {
 	    return this.below;
 	}
 
@@ -212,7 +210,7 @@ public class DoublyLexicalOrderer {
 	 * Returns if the current block has a block below.
 	 * @return true if the current block has a block below, false otherwise.
 	 */
-	public bool hasBelow() {
+	public boolean hasBelow() {
 	    return (this.below != null);
 	}
 
@@ -221,7 +219,7 @@ public class DoublyLexicalOrderer {
 	 * @return true if the current block has a block to the right, false
 	 *         otherwise.
 	 */
-	public bool hasRight() {
+	public boolean hasRight() {
 	    return (this.right != null);
 	}
 
@@ -229,7 +227,7 @@ public class DoublyLexicalOrderer {
 	 * Returns if the current block has a next block.
 	 * @return true if the current block has a next block, false otherwise.
 	 */
-	public bool hasNext() {
+	public boolean hasNext() {
 	    return (this.next != null);
 	}
 
@@ -238,17 +236,38 @@ public class DoublyLexicalOrderer {
 	 * @return true if the current block has a previous block, false
 	 *         otherwise.
 	 */
-	public bool hasPrevious() {
+	public boolean hasPrevious() {
 	    return (this.previous != null);
+	}
+    }
+
+    /**
+     *
+     */
+    protected class Refinement {
+	HashSet<Integer> left;
+	HashSet<Integer> right;
+
+	public Refinement(HashSet<Integer> left, HashSet<Integer> right) {
+	    this.left = left;
+	    this.right = right;
+	}
+
+	public HashSet<Integer> getLeft(){
+	    return this.left;
+	}
+
+	public HashSet<Integer> getRight(){
+	    return this.right;
 	}
     }
 
 
     /** The ordered row partition. */
-    LinkedList<HashSet<int>> orderedRowPartition;
+    LinkedList<HashSet<Integer>> orderedRowPartition;
 
     /** The ordered column partition. */
-    LinkedList<HashSet<int>> orderedColumnPartition;
+    LinkedList<HashSet<Integer>> orderedColumnPartition;
 
     /** The original matrix */
     int[][] original;
@@ -260,8 +279,8 @@ public class DoublyLexicalOrderer {
      */
     public DoublyLexicalOrderer(int[][] matrix) {
 	this.original = matrix;
-	this.orderedRowPartition = new LinkedList<HashSet<int>>();
-	this.orderedColumnPartition = new LinkedList<HashSet<int>>();
+	this.orderedRowPartition = new LinkedList<HashSet<Integer>>();
+	this.orderedColumnPartition = new LinkedList<HashSet<Integer>>();
     }
 
     /**
@@ -271,8 +290,8 @@ public class DoublyLexicalOrderer {
      */
     private void determineSize(Block B) {
 	/* Get the rows and columns of the block. */
-	HashSet<int> Ri = B.rows();
-	HashSet<int> Cj = B.columns();
+	HashSet<Integer> Ri = B.rows();
+	HashSet<Integer> Cj = B.columns();
 
 	/* B's size.*/
 	int sizeB = 0;
@@ -305,10 +324,13 @@ public class DoublyLexicalOrderer {
      */
     private int getSplittingRow(Block B) {
 	/* Get the indexes of the rows contained in the block. */
-	HashSet<int> rowIndexes = B.rows();
+	HashSet<Integer> rowIndexes = B.rows();
 
 	/* Get the amount of columns contained in B. */
 	int numCols = B.columns().size();
+
+	/* Get the row part of the block */
+	HashSet<Integer> Ri = B.rows();
 
 	/* Iterate each row in Ri to determine if a block (r, Cj) is
 	 * non-constant */
@@ -330,24 +352,23 @@ public class DoublyLexicalOrderer {
      * @param Cj the original columns set.
      * @return a column refinement of original columns set.
      */
-    private []HashSet<int> getColumnRefinement(int row, HashSet<int> Cj) {
+    private Refinement getColumnRefinement(int row, HashSet<Integer> Cj) {
 	/* Define a column refinement as an array of sets. */
-	[]HashSet<int> columnRefinement = new HashSet<int>[2];
-	columnRefinement[0] = new HashSet<int>();
-	columnRefinement[1] = new HashSet<int>();
+	HashSet<Integer> left  = new HashSet<Integer>();
+	HashSet<Integer> right = new HashSet<Integer>();
 
 	// Iterate through the columns contained in the set Cj.
 	for (int col : Cj) {
 	    // If the entry M[r][c] is 1, add it to the first set.
 	    if (this.original[row][col] == 1) {
-		columnRefinement[0].add(col);
+		left.add(col);
 	    } else {
 		// Otherwise, add it to the second set.
-		columnRefinement[1].add(col);
+		right.add(col);
 	    }
 	}
 
-	return columnRefinement;
+	return new Refinement(left, right);
     }
 
     /**
@@ -358,24 +379,23 @@ public class DoublyLexicalOrderer {
      * @param Ri the original rows set.
      * @return a row refinement of original row set.
      */
-    private []HashSet<int> getRowRefinement(int col, HashSet<int> Ri) {
+    private Refinement getRowRefinement(int col, HashSet<Integer> Ri) {
 	/* Define a row refinement as an array of sets. */
-	[]HashSet<int> rowRefinement = new HashSet<int>[2];
-	rowRefinement[0] = new HashSet<int>();
-	rowRefinement[1] = new HashSet<int>();
+	HashSet<Integer> left  = new HashSet<Integer>();
+	HashSet<Integer> right = new HashSet<Integer>();
 
 	// Iterate through the columns contained in the set Cj.
 	for (int row : Ri) {
 	    // If the entry M[r][c] is 1, add it to the first set.
 	    if (this.original[row][col] == 1) {
-		rowRefinement[0].add(row);
+		left.add(row);
 	    } else {
 		// Otherwise, add it to the second set.
-		rowRefinement[1].add(row);
+		right.add(row);
 	    }
 	}
 
-	return rowRefinement;
+	return new Refinement(left, right);
     }
 
     /**
@@ -384,21 +404,21 @@ public class DoublyLexicalOrderer {
      * @param B the current block.
      * @return the new current block.
      */
-    private Block produceColumnRefinement([]HashSet<int> colRef, Block B) {
+    private Block produceColumnRefinement(Refinement Ref, Block B) {
 	/* Get the left and right refinement */
-	HashSet<int> lRef = colRef[0];
-	HashSet<int> rRef = colRef[1];
+	HashSet<Integer> lRef = Ref.getLeft();
+	HashSet<Integer> rRef = Ref.getRight();
 
 	/* Determine which parts are smaller and bigger. */
-	HashSet<int> sRef, bRef;
-	bool leftSmaller = (lRef.size() <= rRef().size());
+	HashSet<Integer> sRef, bRef;
+	boolean leftSmaller = (lRef.size() <= rRef.size());
 
 	if (leftSmaller) {
 	    sRef = lRef;
 	    bRef = rRef;
 	} else {
 	    sRef = rRef;
-	    bRef = bRef;
+	    bRef = lRef;
 	}
 
 	/* Produce all the blocks obtained by the column refinement. */
@@ -410,7 +430,7 @@ public class DoublyLexicalOrderer {
 
 	do {
 	    /* Get the current block's row part. */
-	    HashSet<int> Ri = current.rows();
+	    HashSet<Integer> Ri = current.rows();
 
 	    Block smallBlock = new Block(Ri, sRef);
 	    Block bigBlock   = new Block(Ri, bRef);
@@ -487,21 +507,21 @@ public class DoublyLexicalOrderer {
      * @param B the current block.
      * @return the new current block.
      */
-    private Block produceRowRefinement([]HashSet<int> rowRef, Block B) {
+    private Block produceRowRefinement(Refinement rowRef, Block B) {
 	/* Get the left and right refinement */
-	HashSet<int> lRef = rowRef[0];
-	HashSet<int> rRef = rowRef[1];
+	HashSet<Integer> lRef = rowRef.getLeft();
+	HashSet<Integer> rRef = rowRef.getRight();
 
 	/* Determine which parts are smaller and bigger. */
-	HashSet<int> sRef, bRef;
-	bool leftSmaller = (lRef.size() <= rRef().size());
+	HashSet<Integer> sRef, bRef;
+	boolean leftSmaller = (lRef.size() <= rRef.size());
 
 	if (leftSmaller) {
 	    sRef = lRef;
 	    bRef = rRef;
 	} else {
 	    sRef = rRef;
-	    bRef = bRef;
+	    bRef = lRef;
 	}
 
 	/* Produce all the blocks obtained by the column refinement. */
@@ -513,17 +533,17 @@ public class DoublyLexicalOrderer {
 
 	do {
 	    /* Get the current block's column part. */
-	    HashSet<int> Cj = current.columns();
+	    HashSet<Integer> Cj = current.columns();
 
 	    Block smallBlock = new Block(sRef, Cj);
 	    Block bigBlock   = new Block(bRef, Cj);
 
 	    /* Determine the smaller block's size. */
-	    HashMap<int, int> currentRowMap = current.getRowSizeMap();
+	    HashMap<Integer, Integer> currentRowMap = current.getRowSizeMap();
 	    int sizeSmall = 0;
 	    for (int r : sRef) {
-		rowBlockSize = currentRowMap.get(r);
-		smallBlock.setRowSize(rowBlockSize);
+		int rowBlockSize = currentRowMap.get(r);
+		smallBlock.setRowSize(r, rowBlockSize);
 		sizeSmall += rowBlockSize;
 		
 		/* Remove the appended row of the current map. */
@@ -532,7 +552,7 @@ public class DoublyLexicalOrderer {
 	    smallBlock.setSize(sizeSmall);
 
 	    /* Use the previous information to determine the bigger block's size. */
-	    int sizeBig = current.getSize() - sizeSmall;
+	    int sizeBig = current.size() - sizeSmall;
 	    bigBlock.setSize(sizeBig);
 	    bigBlock.setRowSizeMap(currentRowMap);
 
@@ -570,8 +590,8 @@ public class DoublyLexicalOrderer {
 	    }
 
 	    /* The current blocks become the previous. */
-	    prevLeft  = leftBlock;
-	    prevRight = rightBlock;
+	    prevTop = topBlock;
+	    prevBot = botBlock;
 
 	    /* Move to the next block to the right, if there is no such block,
 	     * exit the loop. */
@@ -585,5 +605,55 @@ public class DoublyLexicalOrderer {
 
 	/* Return the new block we're standing on. */
 	return ogTop;
+    }
+
+    /**
+     * Returns the ordered partition of rows as an array.
+     * @return the ordered partition of rows as an array.
+     */
+    public int[] getOrderedRows() {
+	/* Get the amount of rows in the matrix. */
+	int numRows = this.original.length;
+	
+	int[] orderedRows = new int[numRows];
+	
+	/* Traverse the ordered partition to obtain an array representation. */
+	int k = 0;
+	for (HashSet<Integer> rowPart : orderedRowPartition) {
+	    for (int r : rowPart) {
+		orderedRows[k++] = r;
+	    }
+	}
+	
+	return orderedRows;
+    }
+
+    /**
+     * Returns the ordered partition of columns as an array.
+     * @return the ordered partition of columns as an array.
+     */
+    public int[] getOrderedColumns() {
+	/* Get the amount of rows in the matrix. */
+	int numCols = this.original.length;
+	
+	int[] orderedCols = new int[numCols];
+	
+	/* Traverse the ordered partition to obtain an array representation. */
+	int k = 0;
+	for (HashSet<Integer> colPart : orderedColumnPartition) {
+	    for (int c : colPart) {
+		orderedCols[k++] = c;
+	    }
+	}
+	
+	return orderedCols;
+    }
+    
+    /**
+     * Returns a doubly lexicographical ordering of the original matrix.
+     * @return a doubly lexicographical ordering of the original matrix.
+     */
+    public int[][] getOrderedMatrix() {
+	return this.original;
     }
 }
