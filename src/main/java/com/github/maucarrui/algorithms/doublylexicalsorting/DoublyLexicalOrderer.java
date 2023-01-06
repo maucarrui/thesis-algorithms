@@ -246,13 +246,13 @@ public class DoublyLexicalOrderer {
 
     /** The ordered row partition. */
     LinkedList<HashSet<int>> orderedRowPartition;
-    
+
     /** The ordered column partition. */
     LinkedList<HashSet<int>> orderedColumnPartition;
-    
+
     /** The original matrix */
     int[][] original;
-    
+
     /**
      * Unique constructor for a Doubly Lexical Orderer that receives the
      * matrix to be ordered.
@@ -273,27 +273,27 @@ public class DoublyLexicalOrderer {
 	/* Get the rows and columns of the block. */
 	HashSet<int> Ri = B.rows();
 	HashSet<int> Cj = B.columns();
-	
+
 	/* B's size.*/
 	int sizeB = 0;
-	
+
 	/* Iterate each row in Ri and determine the size of (r, Cj). */
 	for (int r : Ri) {
 	    /* (r, Cj)'s size. */
 	    int sizeR = 0;
-	    
+
 	    for (int c : Cj) {
 		sizeR += this.original[r][c];
 	    }
-	    
+
 	    B.setRowSize(r, sizeR);
-	    
+
 	    sizeB += sizeR;
 	}
-	
+
 	B.setSize(sizeB);
     }
-    
+
     /**
      * Returns the index of a splitting row of B.
      *
@@ -306,10 +306,10 @@ public class DoublyLexicalOrderer {
     private int getSplittingRow(Block B) {
 	/* Get the indexes of the rows contained in the block. */
 	HashSet<int> rowIndexes = B.rows();
-	
+
 	/* Get the amount of columns contained in B. */
 	int numCols = B.columns().size();
-	
+
 	/* Iterate each row in Ri to determine if a block (r, Cj) is
 	 * non-constant */
 	for (int r : Ri) {
@@ -317,11 +317,11 @@ public class DoublyLexicalOrderer {
 		return r;
 	    }
 	}
-	
+
 	/* If all row blocks are constant, there is no splitting row. */
 	return -1;
     }
-    
+
     /**
      * Defines a column refinement. Given a row r, the first set of columns
      * contains all the non-zero entries, the second set of columns contains all
@@ -335,7 +335,7 @@ public class DoublyLexicalOrderer {
 	[]HashSet<int> columnRefinement = new HashSet<int>[2];
 	columnRefinement[0] = new HashSet<int>();
 	columnRefinement[1] = new HashSet<int>();
-	
+
 	// Iterate through the columns contained in the set Cj.
 	for (int col : Cj) {
 	    // If the entry M[r][c] is 1, add it to the first set.
@@ -346,7 +346,7 @@ public class DoublyLexicalOrderer {
 		columnRefinement[1].add(col);
 	    }
 	}
-	
+
 	return columnRefinement;
     }
 
@@ -363,7 +363,7 @@ public class DoublyLexicalOrderer {
 	[]HashSet<int> rowRefinement = new HashSet<int>[2];
 	rowRefinement[0] = new HashSet<int>();
 	rowRefinement[1] = new HashSet<int>();
-	
+
 	// Iterate through the columns contained in the set Cj.
 	for (int row : Ri) {
 	    // If the entry M[r][c] is 1, add it to the first set.
@@ -374,10 +374,10 @@ public class DoublyLexicalOrderer {
 		rowRefinement[1].add(row);
 	    }
 	}
-	
+
 	return rowRefinement;
     }
-    
+
     /**
      * Produce the blocks obtained by performing a column refinement.
      * @param colRef the column refinement.
@@ -388,7 +388,7 @@ public class DoublyLexicalOrderer {
 	/* Get the left and right refinement */
 	HashSet<int> lRef = colRef[0];
 	HashSet<int> rRef = colRef[1];
-	
+
 	/* Determine which parts are smaller and bigger. */
 	HashSet<int> sRef, bRef;
 	bool leftSmaller = (lRef.size() <= rRef().size());
@@ -407,7 +407,7 @@ public class DoublyLexicalOrderer {
 	Block ogRight   = null;
 	Block prevLeft  = null;
 	Block prevRight = null;
-	
+
 	do {
 	    /* Get the current block's row part. */
 	    HashSet<int> Ri = current.rows();
@@ -424,14 +424,14 @@ public class DoublyLexicalOrderer {
 		int currentRowSize = current.getRowSize(r);
 		int smallRowSize   = smallBlock.getRowSize(r);
 		int bigRowSize     = currentRowSize - smallRowSize;
-		
+
 		bigBlock.setRowSize(r, bigRowSize);
-		
+
 		sizeBig += bigRowSize;
 	    }
-	    
+
 	    bigBlock.setSize(sizeBig);
-	    
+
 	    /* Determine which block is on the left and right. */
 	    Block leftBlock, rightBlock;
 	    if (leftSmaller) {
@@ -441,33 +441,42 @@ public class DoublyLexicalOrderer {
 		leftBlock  = bigBlock;
 		rightBlock = smallBlock;
 	    }
-	    
+
 	    /* Adjust the blocks' pointers. */
 	    leftBlock.setRight(rightBlock);
 	    rightBlock.setRight(current.getRight());
-		
+
 	    if (prevLeft == null) {
 		ogLeft  = leftBlock;
 		ogRight = rightBlock;
 	    } else {
 		prevLeft.setBelow(leftBlock);
 		prevLeft.setNext(leftBlock);
+		leftBlock.setPrevious(prevLeft);
 		prevRight.setBelow(rightBlock);
 		prevRight.setNext(rightBlock);
 	    }
-	    
+
+	    /* The current blocks become the previous. */
+	    prevLeft  = leftBlock;
+	    prevRight = rightBlock;
+
 	    /* Move to the next block below, if there is no such block, exit the
 	     * loop. */
 	    if (current.hasBelow()) {
 		current = current.getBelow();
 	    } else {
 		leftBlock.setNext(ogRight);
+		ogRight.setPrevious(leftBlock);
 		rightBlock.setNext(current.getNext());
+		if (current.hasNext()) {
+		    current.getNext().setPrevious(rightBlock);
+		}
 		break;
 	    }
 
 	} while (true);
-	
+
 	/* Return the new block we're standing on. */
 	return ogLeft;
     }
