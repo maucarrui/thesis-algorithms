@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.HashMap;
 
+import java.lang.String;
+
 /**
  * Class to represent a Doubly Lexical Orderer.
  *
@@ -498,5 +500,75 @@ public class DoublyLexicalOrderer {
 	int[] orderedCols = getOrderedColumns();
 
 	return buildOrderedMatrix(orderedRows, orderedCols);
+    }
+
+    /**
+     * Returns a string representation of the current state of the algorithm.
+     * @return a string representation of the current state of the algorithm.
+     */
+    @Override public String toString() {
+	/* Define a proper order for the rows and columns. */
+	LinkedList<LinkedList<Integer>> orderedRowsList, orderedColsList;
+	orderedRowsList = new LinkedList<>();
+	orderedColsList = new LinkedList<>();
+
+	for (HashSet<Integer> rowPart : orderedRowPartition) {
+	    LinkedList<Integer> temp = new LinkedList<>();
+
+	    for (int r : rowPart) {
+		temp.add(r);
+	    }
+
+	    orderedRowsList.add(temp);
+	}
+
+	for (HashSet<Integer> colPart : orderedColumnPartition) {
+	    LinkedList<Integer> temp = new LinkedList<>();
+
+	    for (int c : colPart) {
+		temp.add(c);
+	    }
+
+	    orderedColsList.add(temp);
+	}
+
+	String str = "";
+	for (LinkedList<Integer> rowList : orderedRowsList) {
+	    /* Define the upper part of the blocks. */
+	    for (LinkedList<Integer> colList : orderedColsList) {
+		str += "┌";
+		for (int c : colList) {
+		    str += "───";
+		}
+		str += "┐";
+	    }
+
+	    str += "\n";
+
+	    /* Define the contents of the blocks. */
+	    for (int r : rowList) {
+		for (LinkedList<Integer> colList : orderedColsList) {
+		    str += "│";
+		    for (int c : colList) {
+			str += " " + Integer.toString(this.original[r][c]) + " ";
+		    }
+		    str += "│";
+		}
+		str += "\n";
+	    }
+
+
+	    /* Define the bottom part of the blocks. */
+	    for (LinkedList<Integer> colList : orderedColsList) {
+		str += "└";
+		for (int c : colList) {
+		    str += "───";
+		}
+		str += "┘";
+	    }
+	    str += "\n";
+	}
+
+	return str;
     }
 }
