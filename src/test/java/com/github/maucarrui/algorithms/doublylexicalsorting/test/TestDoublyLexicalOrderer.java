@@ -47,7 +47,7 @@ public class TestDoublyLexicalOrderer {
 	    String a = "";
 	    String b = "";
 	    
-	    for (int i = 0; i < n; j++) {
+	    for (int i = 0; i < n; i++) {
 		a += Integer.toString(ordered[i][j]);
 		b += Integer.toString(ordered[i][j+1]);
 	    }
@@ -103,7 +103,7 @@ public class TestDoublyLexicalOrderer {
     }
     
     @Test
-    public void shouldReturnOrderedMatrix() {
+    public void shouldReturnOrderedMatrixHardcoded() {
 	int[][][] testMatrices = new int[][][]{
 	    {
 		{1, 0, 1, 1},
@@ -126,6 +126,23 @@ public class TestDoublyLexicalOrderer {
 		{0, 0, 1, 1, 0, 0, 1},
 		{1, 0, 1, 1, 1, 1, 1},
 		{0, 1, 1, 1, 0, 0, 1},
+	    },
+	    {
+		{0, 1, 1, 1, 1, 0, 1, 0},
+		{1, 1, 0, 0, 1, 1, 1, 0},
+		{0, 0, 0, 1, 1, 1, 0, 1},
+		{1, 1, 1, 1, 0, 1, 1, 1},
+		{0, 0, 1, 1, 0, 0, 1, 0},
+		{1, 0, 1, 1, 1, 1, 1, 1},
+		{0, 1, 1, 1, 0, 0, 1, 0},
+		{0, 0, 1, 1, 1, 1, 0, 1},
+	    },
+	    {
+		{1, 1, 1, 1, 0},
+		{1, 1, 1, 0, 0},
+		{1, 1, 0, 0, 0},
+		{1, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0},
 	    },
 	    {
 		{0, 0, 0, 0, 0},
