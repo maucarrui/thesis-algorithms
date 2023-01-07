@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import java.lang.String;
 
+import java.util.Random;
+
 import com.github.maucarrui.algorithms.doublylexicalordering.DoublyLexicalOrderer;
 
 /**
@@ -185,6 +187,48 @@ public class TestDoublyLexicalOrderer {
 	for (int i = 0; i < testMatrices.length; i++) {
 	    int[][] original = testMatrices[i];
 	    
+	    DoublyLexicalOrderer orderer = new DoublyLexicalOrderer(original);
+	    int[][] ordered   = orderer.getOrderedMatrix();
+	    int[] orderedRows = orderer.getOrderedRows();
+	    int[] orderedCols = orderer.getOrderedColumns();
+	    
+	    assertTrue(isOrdered(ordered));
+	    assertTrue(isConsistent(original, ordered, orderedRows, orderedCols));
+	}
+    }
+    
+    /**
+     * Auxiliary method to return a random (0,1)-matrix of the given size.
+     * @param size the size of the random matrix.
+     * @return a matrix where each entry is a random value between 0 and 1.
+     */
+    private int[][] buildRandomMatrix(int size) {
+	int[][] randM = new int[size][size];
+
+	Random rand = new Random();
+	
+	for (int i = 0; i < size; i++) {
+	    for (int j = 0; j < size; j++) {
+		int k = rand.nextInt(100);
+		randM[i][j] = (k < 50) ? 0 : 1;
+	    }
+	}
+	
+	return randM;
+    }
+    
+    @Test
+    public void shouldReturnOrderedMatrixRandoms(){
+	int numRandMatrices = 100;
+	int maxSize = 200;
+	
+	Random rand = new Random();
+	
+	for (int i = 0; i < numRandMatrices; i++) {
+	    int size = rand.nextInt(maxSize) + 1;
+	    
+	    int[][] original = buildRandomMatrix(size);
+
 	    DoublyLexicalOrderer orderer = new DoublyLexicalOrderer(original);
 	    int[][] ordered   = orderer.getOrderedMatrix();
 	    int[] orderedRows = orderer.getOrderedRows();
