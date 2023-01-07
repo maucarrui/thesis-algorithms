@@ -37,18 +37,11 @@ public class PerformanceCheck {
      * Checks the performance of the doubly lexical ordering algorithm.
      */
     private static void checkDoublyLexicalOrderingAlgPerfomance() {
-	/* The sizes of the test matrices */
-	int[]sizes = new int[]{
-	    5, 10, 20, 40, 80, 
-	    160, 320, 640, 1280,
-	    2560, 5120, 10240,
-	};
 	DoublyLexicalOrderer dlo;
 	Instant start, finish;
-	String str;
+	String str = "Size,Time\n";
 	
-	str = "(Num. Entries, Miliseconds)\n";
-	for (int size = 10; size <= 2000; size += 10) {
+	for (int size = 10; size <= 4000; size += 10) {
 	    int[][] matrix = buildRandomMatrix(size);
 	    dlo = new DoublyLexicalOrderer(matrix);
 
@@ -59,7 +52,7 @@ public class PerformanceCheck {
 	    int secs = Duration.between(start, finish).toSecondsPart();
 	    int millis = Duration.between(start, finish).toMillisPart();
 	    
-	    str += String.format("%d, ", size);
+	    str += String.format("%d,", size);
 	    str += String.format("%d", secs);
 	    str += ".";
 	    str += String.format("%03d\n", millis);
