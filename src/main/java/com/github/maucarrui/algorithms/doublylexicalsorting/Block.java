@@ -54,8 +54,8 @@ class Block {
      * @param Cj the column part of the block.
      */
     Block(HashSet<Integer> Ri, HashSet<Integer> Cj) {
-	this.rows = rows;
-	this.columns = columns;
+	this.rows = Ri;
+	this.columns = Cj;
 	this.size = 0;
 	this.rowSize = new HashMap<Integer, Integer>();
 	this.right = null;
