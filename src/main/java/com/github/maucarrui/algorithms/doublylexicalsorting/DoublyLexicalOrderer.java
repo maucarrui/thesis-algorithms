@@ -227,6 +227,7 @@ public class DoublyLexicalOrderer {
 		leftBlock.setPrevious(prevLeft);
 		prevRight.setBelow(rightBlock);
 		prevRight.setNext(rightBlock);
+		rightBlock.setPrevious(prevRight);
 	    }
 
 	    /* The current blocks become the previous. */
@@ -297,9 +298,6 @@ public class DoublyLexicalOrderer {
 		int rowBlockSize = currentRowMap.get(r);
 		smallBlock.setRowSize(r, rowBlockSize);
 		sizeSmall += rowBlockSize;
-
-		/* Remove the appended row of the current map. */
-		currentRowMap.remove(r);
 	    }
 	    smallBlock.setSize(sizeSmall);
 
@@ -330,7 +328,11 @@ public class DoublyLexicalOrderer {
 	    }
 
 	    if (current.hasPrevious()) {
+		if (current.getPrevious().hasBelow()) {
+		    current.getPrevious().setBelow(topBlock);
+		}
 		current.getPrevious().setNext(topBlock);
+		topBlock.setPrevious(current.getPrevious());
 	    }
 
 	    if (prevTop == null) {
