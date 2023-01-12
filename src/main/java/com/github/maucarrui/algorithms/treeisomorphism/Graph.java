@@ -232,5 +232,62 @@ public class Graph<T extends Comparable<T>> {
 	
 	return edges;
     }
+
+    /**
+     * Returns whether the current graph is a tree.
+     *
+     * A tree is a connected non-ciclic graph.
+     * @return true if the current graph is a tree, false otherwise.
+     */
+    public boolean isTree(){
+	/* If the graph is empty, then by definition it's a tree. */
+	if (this.vertices.size() == 0) { return true; }
+
+	/* Set a random vertex of the graph as a root. */
+	T rootID = this.elements.peek();
 	
+	/* Perform a BFS traversal from this vertex. */
+	HashMap<T, T> parenthood = new HashMap<>();
+	LinkedList<T> Q = new LinkedList<>();
+	HashSet<T> explored = new HashSet<>();
+
+	/* Add the root to the queue and explored vertices. */
+	Q.add(rootID);
+	explored.add(rootID);
+	parenthood.put(rootID, null);
+
+	/* Start the BFS traversal. */
+	while(Q.size() > 0) {
+	    /* Get the queue's head. */
+	    T vID = Q.peek();
+
+	    /* Iterate through the neighbors of the head. */
+	    for (T nID : this.getNeighborsOf(vID)) {
+		if (!explored.contains(nID)) {
+		    /* If the neighbor hasn't been explored, append the neighbor
+		     * to the queue, add it to the set of explored vertices and
+		     * define the parent-child relation. */
+		    Q.add(nID);
+		    explored.add(nID);
+		    parenthood.put(nID, vID);
+		} else {
+		    /* If the neighbor has been explored, at it isn't the
+		     * queue's head, then the graph contains a cycle; it's not a
+		     * tree. */
+		    if (!nID.equals(vID)) {
+			return false;
+		    }
+		}
+	    }
+
+	    /* Once all the neighbors have been explored, remove the head. */
+	    Q.remove();
+	}
+	
+	/* If there are no cycles, then after a BFS traversal, all the vertices
+	 * must have been explored. */
+	return (explored.size() != this.vertices.size());
+	
+    }
+
 }
