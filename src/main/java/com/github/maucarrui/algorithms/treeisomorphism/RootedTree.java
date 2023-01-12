@@ -130,6 +130,14 @@ class RootedTree<T extends Comparable<T>> {
     }
 
     /**
+     * Returns the root of the rooted tree.
+     * @return the root of the rooted tree.
+     */
+    public T root() {
+	return this.root;
+    }
+
+    /**
      * Returns the parent of the child in the rooted tree.
      * @return the parent of the child in the rooted tree.
      */
