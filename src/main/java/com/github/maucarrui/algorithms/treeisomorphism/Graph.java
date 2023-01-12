@@ -114,6 +114,7 @@ public class Graph<T extends Comparable<T>> {
     public void addVertex(T ID) {
 	Vertex<T> v = new Vertex<>(ID);
 	this.vertices.put(ID, v);
+	this.elements.add(ID);
     }
 
     /**
