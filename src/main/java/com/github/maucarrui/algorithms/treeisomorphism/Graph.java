@@ -15,10 +15,10 @@ public class Graph<T extends Comparable<T>> {
     private class Vertex<T> {
 	/** Identifier of the vertex. */
 	private T ID;
-	
+
 	/** The identifiers of the neighbors of the vertex. */
 	private HashSet<T> neighbors;
-	
+
 	/**
 	 * Unique constructor which receives the identifier of the vertex.
 	 * @param element the identifier of the vertex.
@@ -27,7 +27,7 @@ public class Graph<T extends Comparable<T>> {
 	    this.ID = ID;
 	    this.neighbors = new HashSet<>();
 	}
-	
+
 	/**
 	 * Returns the vertex's identifier.
 	 * @return the vertex's identifier.
@@ -35,7 +35,7 @@ public class Graph<T extends Comparable<T>> {
 	public T getID() {
 	    return this.ID;
 	}
-	
+
 	/**
 	 * Returns the set of neighbors of the vertex.
 	 * @return the set of neighbors of the vertex.
@@ -43,7 +43,7 @@ public class Graph<T extends Comparable<T>> {
 	public HashSet<T> getNeighbors() {
 	    return this.neighbors;
 	}
-	
+
 	/**
 	 * Add the neighbor's ID to the set of neighbors.
 	 * @param nID the neighbor's ID.
@@ -51,12 +51,12 @@ public class Graph<T extends Comparable<T>> {
 	public void addNeighbor(T nID) {
 	    this.neighbors.add(nID);
 	}
-	
+
     }
-    
+
     /** Vertices of the graph. */
     private HashMap<T, Vertex<T>> vertices;
-    
+
     /** Auxiliary list to have constant-time access to a vertex graph. */
     private LinkedList<T> elements;
 
@@ -91,7 +91,7 @@ public class Graph<T extends Comparable<T>> {
 	    if (!this.containsVertex(uID)) {
 		this.addVertex(uID);
 	    }
-	    
+
 	    /* Create an edge between the previous vertices. */
 	    this.connectVertices(vID, uID);
 	}
@@ -106,7 +106,7 @@ public class Graph<T extends Comparable<T>> {
     public boolean containsVertex(T ID) {
 	return this.vertices.containsKey(ID);
     }
-    
+
     /**
      * Adds a vertex whose ID is the given one.
      * @param ID the vertex's ID.
@@ -115,7 +115,7 @@ public class Graph<T extends Comparable<T>> {
 	Vertex<T> v = new Vertex<>(ID);
 	this.vertices.put(ID, v);
     }
-    
+
     /**
      * Adds an edge between the given vertices.
      * @param vID the ID of one vertex.
@@ -125,7 +125,7 @@ public class Graph<T extends Comparable<T>> {
 	/* Get the vertices that correspond to the ID. */
 	Vertex<T> v = this.vertices.get(vID);
 	Vertex<T> u = this.vertices.get(uID);
-	
+
 	/* The vertex v is adjacent to u, and viceversa. */
 	v.addNeighbor(uID);
 	u.addNeighbor(vID);
@@ -142,7 +142,7 @@ public class Graph<T extends Comparable<T>> {
 	if (!this.containsVertex(vID)) {
 	    return null;
 	}
-	
+
 	return this.vertices.get(vID).getNeighbors();
     }
 
@@ -166,12 +166,12 @@ public class Graph<T extends Comparable<T>> {
 	    if (prevID != null) {
 		this.connectVertices(prevID, currentID);
 	    }
-	    
+
 	    /* Set the previous vertex as the current one. */
 	    prevID = currentID;
 	}
     }
-    
+
     /**
      * Returns the edges obtained by performing a BFS traversal starting from
      * the specified root, if the root is not contained in the graph, it returns
@@ -187,20 +187,20 @@ public class Graph<T extends Comparable<T>> {
 
 	/* Define an empty list of edges. */
 	LinkedList<LinkedList<T>> edges = new LinkedList<>();
-	
+
 	/* Define a queue to perform the BFS traversal */
 	LinkedList<T> Q = new LinkedList<>();
 	HashSet<T> explored = new HashSet<>();
-	
+
 	/* Add the root to the queue and explored vertices. */
 	Q.add(rootID);
 	explored.add(rootID);
-	
+
 	/* Start the BFS traversal. */
 	while(Q.size() > 0) {
 	    /* Get the queue's head. */
 	    T vID = Q.peek();
-	    
+
 	    /* Iterate through the neighbors of the head. */
 	    for (T nID : this.getNeighborsOf(vID)) {
 		/* If the neighbor hasn't been explored, add the edge between
@@ -209,27 +209,27 @@ public class Graph<T extends Comparable<T>> {
 		if (!explored.contains(nID)) {
 		    /* Create an edge as a linked list. */
 		    LinkedList<T> edge = new LinkedList<>();
-		    
+
 		    /* The first ID corresponds to the father. */
 		    edge.add(vID);
-		    
+
 		    /* The second ID corresponds to the neighbor. */
 		    edge.add(nID);
-		    
+
 		    /* Add the edge to the list of edges. */
 		    edges.add(edge);
-		    
+
 		    /* Add the neighbor to the queue and the explored
 		     * vertices. */
 		    Q.add(nID);
 		    explored.add(nID);
 		}
 	    }
-	    
+
 	    /* Once all the neighbors have been explored, remove the head. */
 	    Q.remove();
 	}
-	
+
 	return edges;
     }
 
@@ -245,7 +245,7 @@ public class Graph<T extends Comparable<T>> {
 
 	/* Set a random vertex of the graph as a root. */
 	T rootID = this.elements.peek();
-	
+
 	/* Perform a BFS traversal from this vertex. */
 	HashMap<T, T> parenthood = new HashMap<>();
 	LinkedList<T> Q = new LinkedList<>();
@@ -283,11 +283,11 @@ public class Graph<T extends Comparable<T>> {
 	    /* Once all the neighbors have been explored, remove the head. */
 	    Q.remove();
 	}
-	
+
 	/* If there are no cycles, then after a BFS traversal, all the vertices
 	 * must have been explored. */
 	return (explored.size() != this.vertices.size());
-	
+
     }
 
 }
