@@ -7,8 +7,8 @@ import java.util.LinkedList;
 /**
  * Class to represent a graph.
  */
-public class Graph<T> {
-    
+public class Graph<T extends Comparable<T>> {
+
     /**
      * Private internal class to represent a vertex in the graph.
      */
