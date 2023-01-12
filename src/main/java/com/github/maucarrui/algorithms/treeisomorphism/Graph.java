@@ -55,8 +55,11 @@ public class Graph<T extends Comparable<T>> {
     }
     
     /** Vertices of the graph. */
-    HashMap<T, Vertex<T>> vertices;
+    private HashMap<T, Vertex<T>> vertices;
     
+    /** Auxiliary list to have constant-time access to a vertex graph. */
+    private LinkedList<T> elements;
+
     /** Empty constructor for a graph. */
     public Graph() {
 	this.vertices = new HashMap<>();
