@@ -112,4 +112,38 @@ class RootedTree<T extends Comparable<T>> {
 	    this.verticesInLevel.put(level, fromDistance.get(distance));
 	}
     }
+
+    /**
+     * Returns the set of leaves of the tree.
+     * @return the set of leaves of the tree.
+     */
+    public HashSet<T> leaves() {
+	return this.leaves;
+    }
+
+    /**
+     * Returns the height of the rooted tree.
+     * @return the height of the rooted tree.
+     */
+    public int height() {
+	return this.height;
+    }
+
+    /**
+     * Returns the parent of the child in the rooted tree.
+     * @return the parent of the child in the rooted tree.
+     */
+    public T getParent(T childID) {
+	return this.parenthood.get(childID);
+    }
+
+    /**
+     * Returns the set of vertices found on the specified level in the rooted
+     * tree.
+     * @return the set of vertices found on the specified level in the rooted
+     *         tree.
+     */
+    public HashSet<T> getVerticesOfLevel(int level) {
+	return this.verticesInLevel.get(level);
+    }
 }
