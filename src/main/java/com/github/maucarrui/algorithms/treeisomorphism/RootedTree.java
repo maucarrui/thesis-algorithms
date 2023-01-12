@@ -53,7 +53,7 @@ class RootedTree<T extends Comparable<T>> {
      * tree, define the parenthood mapping, and determine which vertices are the
      * leaves of the rooted tree.
      */
-    public void setInitialValues() {
+    void setInitialValues() {
 	/* Get the edges obtained by performing a BFS traversal on the rooted
 	 * tree. */
 	LinkedList<LinkedList<T>> edges = this.tree.getBFSEdges(this.root);
@@ -117,7 +117,7 @@ class RootedTree<T extends Comparable<T>> {
      * Returns the set of leaves of the tree.
      * @return the set of leaves of the tree.
      */
-    public HashSet<T> leaves() {
+    HashSet<T> leaves() {
 	return this.leaves;
     }
 
@@ -125,7 +125,7 @@ class RootedTree<T extends Comparable<T>> {
      * Returns the height of the rooted tree.
      * @return the height of the rooted tree.
      */
-    public int height() {
+    int height() {
 	return this.height;
     }
 
@@ -133,7 +133,7 @@ class RootedTree<T extends Comparable<T>> {
      * Returns the root of the rooted tree.
      * @return the root of the rooted tree.
      */
-    public T root() {
+    T root() {
 	return this.root;
     }
 
@@ -141,7 +141,7 @@ class RootedTree<T extends Comparable<T>> {
      * Returns the parent of the child in the rooted tree.
      * @return the parent of the child in the rooted tree.
      */
-    public T getParent(T childID) {
+    T getParent(T childID) {
 	return this.parenthood.get(childID);
     }
 
@@ -151,7 +151,7 @@ class RootedTree<T extends Comparable<T>> {
      * @return the set of vertices found on the specified level in the rooted
      *         tree.
      */
-    public HashSet<T> getVerticesOfLevel(int level) {
+    HashSet<T> getVerticesOfLevel(int level) {
 	return this.verticesInLevel.get(level);
     }
 }
