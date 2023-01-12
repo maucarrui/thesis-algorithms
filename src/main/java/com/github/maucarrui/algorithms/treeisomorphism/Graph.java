@@ -153,27 +153,22 @@ public class Graph<T extends Comparable<T>> {
      * in the graph, create it and add it.
      * @param path the sequence of vertices.
      */
-    public void addPath(T[] path) {
-	/* The path's length. */
-	int lp = path.length;
-	
-	/* Check if the first vertex on the path is in the graph. */
-	if (!this.containsVertex(path[0])) {
-	    this.addVertex(path[0]);
-	}
-
+    public void addPath(LinkedList<T> path) {
+	T prevID = null;
 	/* Traverse the vertices in the path */
-	for (int i = 1; i < lp; i++) {
-	    T vID = path[i];
-	    
+	for (T currentID : path) {
 	    /* If the current vertex is not in the graph, add it. */
-	    if (!this.containsVertex(vID)) {
-		this.addVertex(vID);
+	    if (!this.containsVertex(currentID)) {
+		this.addVertex(currentID);
+	    }
+
+	    /* Add an edge between the current vertex and the previous one. */
+	    if (prevID != null) {
+		this.connectVertices(prevID, currentID);
 	    }
 	    
-	    /* Add an edge between the current vertex and the previous one. */
-	    T uID = path[i-1];
-	    this.connectVertices(vID, uID);
+	    /* Set the previous vertex as the current one. */
+	    prevID = currentID;
 	}
     }
     
