@@ -63,23 +63,25 @@ public class Graph<T extends Comparable<T>> {
     /** Empty constructor for a graph. */
     public Graph() {
 	this.vertices = new HashMap<>();
+	this.elements = new LinkedList<>();
     }
-    
-    /** 
-     * Constructor which receives an array of edges to build the graph.
-     * @param edges the array of edges.
+
+    /**
+     * Constructor which receives a list of edges to build the graph.
+     * @param edges the linked list of edges.
      */
-    public Graph(T[][] edges) {
+    public Graph(LinkedList<LinkedList<T>> edges) {
 	this.vertices = new HashMap<>();
-	
+	this.elements = new LinkedList<>();
+
 	/* Traverse the edges and add them to the graph. */
-	for (T[] edge : edges) {
+	for (LinkedList<T> edge : edges) {
 	    /* Get the first vertex's ID in the pair */
-	    T vID = edge[0];
+	    T vID = edge.peekFirst();
 
 	    /* Get the second vertex's ID in the pair */
-	    T uID = edge[1];
-	    
+	    T uID = edge.peekLast();
+
 	    /* If there is no vertex in the tree with first ID, create it. */
 	    if (!this.containsVertex(vID)) {
 		this.addVertex(vID);
