@@ -52,6 +52,15 @@ public class Graph<T extends Comparable<T>> {
 	    this.neighbors.add(nID);
 	}
 
+	/**
+	 * Returns whether the current vertex is connected to the other vertex.
+	 * @return true if the current vertex is connected to the other vertex,
+	 *         false otherwise.
+	 */
+	public boolean hasNeighbor(T nID) {
+	    return this.neighbors.contains(nID);
+	}
+
     }
 
     /** Vertices of the graph. */
@@ -138,6 +147,22 @@ public class Graph<T extends Comparable<T>> {
 	/* The vertex v is adjacent to u, and viceversa. */
 	v.addNeighbor(uID);
 	u.addNeighbor(vID);
+    }
+
+    /**
+     * Returns whether two vertices are connected in the current graph.
+     * @param vID the ID of one vertex.
+     * @param uID the ID of the other vertex.
+     * @return true if the two vertices are adjacent in the graph, false
+     *         otherwise.
+     */
+    public boolean areConnected(T vID, T uID) {
+	if (!this.containsVertex(vID) || !this.containsVertex(uID)) {
+	    return false;
+	}
+
+	Vertex<T> v = this.vertices.get(vID);
+	return v.hasNeighbor(uID);
     }
 
     /**
