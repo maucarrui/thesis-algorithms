@@ -215,7 +215,7 @@ public class Graph<T extends Comparable<T>> {
      */
     public LinkedList<LinkedList<T>> getBFSEdges(T rootID) {
 	/* If the root is not contained in the tree, return null. */
-	if (this.containsVertex(rootID)) {
+	if (!this.containsVertex(rootID)) {
 	    return null;
 	}
 
