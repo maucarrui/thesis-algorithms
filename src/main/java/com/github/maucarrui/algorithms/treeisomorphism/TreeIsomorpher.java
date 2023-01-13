@@ -139,6 +139,35 @@ public class TreeIsomorpher<U extends Comparable<U>, V extends Comparable<V>> {
     }
 
     /**
+     * Auxiliary method to update the children list of the vertices of the next
+     * level.
+     * @param T the rooted tree.
+     * @param vertices the vertices that are the children of the vertices of the
+     *        next level on the rooted tree.
+     * @param children the children mapping.
+     */
+    private <K extends Comparable<K>> void
+	updateChildren(RootedTree<K> T,
+		       HashSet<K> vertices,
+		       HashMap<K, LinkedList<K>> children) {
+	/* Traverse each vertex. */
+	for (K vertex : vertices) {
+	    /* Get the parent of the current vertex. */
+	    K parent = T.getParent(vertex);
+
+	    /* Append the current vertex to the list of children of its
+	     * parent. */
+	    if (children.containsKey(parent)) {
+		children.get(parent).add(vertex);
+	    } else {
+		LinkedList<K> ch = new LinkedList<>();
+		ch.add(vertex);
+		children.put(parent, ch);
+	    }
+	}
+    }
+
+    /**
      * Returns whether two rooted trees are isomorphic.
      * @param G on of the rooted trees to the check for isomorphism.
      * @param rootG the root of the rooted tree G.
