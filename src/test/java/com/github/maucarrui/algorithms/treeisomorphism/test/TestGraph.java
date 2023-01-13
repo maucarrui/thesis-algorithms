@@ -9,6 +9,7 @@ import java.lang.String;
 import java.util.Random;
 
 import java.util.LinkedList;
+import java.util.HashSet;
 
 import com.github.maucarrui.algorithms.treeisomorphism.Graph;
 
@@ -85,5 +86,110 @@ public class TestGraph {
 	Assert.assertFalse(G.areConnected("e", "a"));
 	Assert.assertFalse(G.areConnected("e", "c"));
 	Assert.assertFalse(G.areConnected("e", "d"));
+    }
+
+    /**
+     * Tests the methods add and contains from the Graph class.
+     */
+    @Test
+    public void testAddAndContains() {
+	Graph<Integer> G = new Graph<>();
+
+	for (int i = 0; i < 10; i++) {
+	    Assert.assertFalse(G.containsVertex(i));
+	    G.addVertex(i);
+	    Assert.assertTrue(G.containsVertex(i));
+	}
+    }
+
+    /**
+     * Tests the methods connect and are connected from the Graph class.
+     */
+    @Test
+    public void testConnectAndAreConnected() {
+	Graph<Integer> G = new Graph<>();
+
+	G.addVertex(0);
+	for (int i = 1; i < 10; i++) {
+	    Assert.assertFalse(G.areConnected(i-1, i));
+	    G.addVertex(i);
+	    Assert.assertFalse(G.areConnected(i-1, i));
+	    G.connectVertices(i-1, i);
+	    Assert.assertTrue(G.areConnected(i-1, i));
+	    Assert.assertTrue(G.areConnected(i, i-1));
+	}
+    }
+
+    /**
+     * Tests the methods get neighbors from the Graph class.
+     */
+    @Test
+    public void testGetNeighborsOf() {
+	/* Define a graph. */
+	Graph<String> G = new Graph<>();
+
+	G.addVertex("a");
+	G.addVertex("b");
+	G.addVertex("c");
+	G.addVertex("d");
+	G.addVertex("e");
+
+	G.connectVertices("a", "c");
+	G.connectVertices("a", "b");
+	G.connectVertices("b", "d");
+	G.connectVertices("b", "e");
+
+	/* The expected neighbors sets. */
+	HashSet<String> aNeighbors = new HashSet<>();
+	HashSet<String> bNeighbors = new HashSet<>();
+	HashSet<String> cNeighbors = new HashSet<>();
+	HashSet<String> dNeighbors = new HashSet<>();
+	HashSet<String> eNeighbors = new HashSet<>();
+
+	aNeighbors.add("b");
+	aNeighbors.add("c");
+
+	bNeighbors.add("a");
+	bNeighbors.add("d");
+	bNeighbors.add("e");
+
+	cNeighbors.add("a");
+
+	dNeighbors.add("b");
+
+	eNeighbors.add("b");
+
+	/* Check that the expected and obtained neighbors sets are equal. */
+	Assert.assertEquals(aNeighbors, G.getNeighborsOf("a"));
+	Assert.assertEquals(bNeighbors, G.getNeighborsOf("b"));
+	Assert.assertEquals(cNeighbors, G.getNeighborsOf("c"));
+	Assert.assertEquals(dNeighbors, G.getNeighborsOf("d"));
+	Assert.assertEquals(eNeighbors, G.getNeighborsOf("e"));
+    }
+
+    /**
+     * Test the method add path from the Graph class.
+     */
+    @Test
+    public void testAddPath() {
+	/* Define an empty graph. */
+	Graph<Integer> G = new Graph<>();
+
+	/* Create a path from the 0 to 9. */
+	LinkedList<Integer> path = new LinkedList<>();
+	for (int i = 0; i < 10; i++) {
+	    path.add(i);
+	}
+
+	/* Add the path to the graph. */
+	G.addPath(path);
+
+	/* Check that the path was correctly added. */
+	for (int i = 1; i < 10; i++) {
+	    Assert.assertTrue(G.containsVertex(i-1));
+	    Assert.assertTrue(G.containsVertex(i));
+	    Assert.assertTrue(G.areConnected(i-1, i));
+	    Assert.assertTrue(G.areConnected(i, i-1));
+	}
     }
 }
