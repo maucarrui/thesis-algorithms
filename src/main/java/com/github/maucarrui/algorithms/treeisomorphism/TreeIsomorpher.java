@@ -391,6 +391,35 @@ public class TreeIsomorpher<U extends Comparable<U>, V extends Comparable<V>> {
      *         isomorphic it returns null.
      */
     public HashMap<U, V> areIsomorphic(Graph<U> G, Graph<V> H) {
-	return new HashMap<U, V>();
+	/* Check that both graphs are indeed trees. */
+	if (!G.isTree() || !H.isTree()) { return null; }
+
+	/* Check that both trees have the same order. */
+	if (G.order() != H.order()) { return null; }
+
+	/* If both trees are empty graphs, return the trivial isomorphism. */
+	if (G.order() == 0) { return new HashMap<U, V>(); }
+
+	HashSet<U> centersG = G.getCentersOfTree();
+	HashSet<V> centersH = H.getCentersOfTree();
+
+	/* Check that both trees have the same amount of centers. */
+	if (centersG.size() != centersH.size()) { return null; }
+
+	/* Root each graph in each center and check if they're isomorphic. */
+	HashMap<U, V> isomorphism = null;
+	for (U centerG : centersG) {
+	    for (V centerH : centersH) {
+		isomorphism = this.areIsomorphic(G, centerG, H, centerH);
+
+		if (isomorphism != null) { return isomorphism; }
+	    }
+
+	    /* If the previous rooed trees were not isomorphic, then the trees
+	     * are not isomorphic. */
+	    break;
+	}
+
+	return null;
     }
 }
