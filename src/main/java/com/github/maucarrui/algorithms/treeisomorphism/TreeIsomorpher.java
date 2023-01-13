@@ -263,6 +263,80 @@ public class TreeIsomorpher<U extends Comparable<U>, V extends Comparable<V>> {
     }
 
     /**
+     * Verifies that the all the levels of both rooted trees share the same
+     * structure. That is, the structures found on the i-th level of one rooted
+     * tree are also found on the i-th level of the other rooted tree.
+     * @param T1 one of the rooted trees.
+     * @param T2 the other rooted tree.
+     * @return the isomorphism between the two rooted trees, if the trees are
+     *         not isomorphic it returns null.
+     */
+    private HashMap<U, V>
+	levelsVerification(RootedTree<U> T1, RootedTree<V> T2) {
+	/* Define a mapping for the values associated with a structure of a
+	 * vertex */
+	HashMap<U, Integer> valuesT1 = new HashMap<>();
+	HashMap<V, Integer> valuesT2 = new HashMap<>();
+
+	/* Define a mapping for the list of ordered children of a vertex. */
+	HashMap<U, LinkedList<U>> childrenT1 = new HashMap<>();
+	HashMap<V, LinkedList<V>> childrenT2 = new HashMap<>();
+
+	/* Define the value of the leaves as 1. */
+	for (U leaf : T1.leaves()) { valuesT1.put(leaf, 1); }
+	for (V leaf : T2.leaves()) { valuesT2.put(leaf, 1); }
+
+	/* Append the leaves found on the 0-th level to its parent list. */
+	this.setInitialChildren(T1, childrenT1);
+	this.setInitialChildren(T2, childrenT2);
+
+	/* Traverse each level and check if they have the same structure on both
+	 * trees. Start at level 1 as all the vertices on the 0-th level are
+	 * leaves. */
+	for (int lvl = 1; lvl <= T1.height(); lvl++) {
+	    /* Define a mapping to keep track of the structures found on the
+	     * current level. */
+	    HashMap<U, MultiSet<Integer>> structOfVertexT1;
+	    HashMap<V, MultiSet<Integer>> structOfVertexT2;
+
+	    structOfVertexT1 = getStructsOnLevel(T1, childrenT1, valuesT1, lvl);
+	    structOfVertexT2 = getStructsOnLevel(T2, childrenT2, valuesT2, lvl);
+
+	    /* Define the inverse mapping of the previous map. */
+	    HashMap<MultiSet<Integer>, HashSet<U>> verticesOfStructT1;
+	    HashMap<MultiSet<Integer>, HashSet<V>> verticesOfStructT2;
+
+	    verticesOfStructT1 = getVerticesOfStructMap(structOfVertexT1);
+	    verticesOfStructT2 = getVerticesOfStructMap(structOfVertexT2);
+
+	    /* Group all the structures of the level. */
+	    MultiSet<MultiSet<Integer>> structuresOfLevelT1;
+	    MultiSet<MultiSet<Integer>> structuresOfLevelT2;
+
+	    structuresOfLevelT1 = groupStructures(structOfVertexT1);
+	    structuresOfLevelT2 = groupStructures(structOfVertexT2);
+
+	    /* If the levels have different structures, they're not
+	     * isomorphic. */
+	    if (!structuresOfLevelT1.equals(structuresOfLevelT2)) {
+		return null;
+	    }
+
+	    /* If they share the same structures, update the values and
+	     * children. */
+	    updateInformation(T1, T2,
+			      valuesT1, valuesT2,
+			      childrenT1, childrenT2,
+			      verticesOfStructT1, verticesOfStructT2,
+			      structuresOfLevelT1);
+	}
+
+	/* If all the levels share the same structure, then they're
+	 * isomorphic. Build an isomorphism and return it. */
+	return buildIsomorphism(T1, T2, childrenT1, childrenT2);
+    }
+
+    /**
      * Returns whether two rooted trees are isomorphic.
      * @param G on of the rooted trees to the check for isomorphism.
      * @param rootG the root of the rooted tree G.
