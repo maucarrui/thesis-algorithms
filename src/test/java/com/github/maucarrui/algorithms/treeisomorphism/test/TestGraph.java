@@ -276,4 +276,52 @@ public class TestGraph {
 	Assert.assertFalse(G.isTree());
     }
 
+    /**
+     * Test the method getCentersOfTree from the Graph class.
+     */
+    @Test
+    public void testGetCentersOfTree() {
+	/* Test with a tree that has only one center. */
+	Graph<String> G = new Graph<>();
+
+	G.addVertex("a");
+	G.addVertex("b");
+	G.addVertex("c");
+	G.addVertex("d");
+	G.addVertex("e");
+	G.addVertex("f");
+
+	G.connectVertices("a", "c");
+	G.connectVertices("a", "b");
+	G.connectVertices("b", "d");
+	G.connectVertices("b", "e");
+	G.connectVertices("d", "f");
+
+	/* Check that it is a tree. */
+	Assert.assertTrue(G.isTree());
+
+	HashSet<String> expectedCenter = new HashSet<>();
+	expectedCenter.add("b");
+
+	/* Check that the obtained center is correct. */
+	Assert.assertEquals(expectedCenter, G.getCentersOfTree());
+
+	/* Test with a tree that has two centers. */
+	Graph<Integer> H = new Graph<>();
+
+	LinkedList<Integer> path = new LinkedList<Integer>();
+	for (int i = 0; i < 6; i++) {
+	    path.add(i);
+	}
+
+	H.addPath(path);
+
+	HashSet<Integer> expectedCenters = new HashSet<>();
+	expectedCenters.add(2);
+	expectedCenters.add(3);
+
+	/* Check that the obtained centers are correct. */
+	Assert.assertEquals(expectedCenters, H.getCentersOfTree());
+    }
+
 }
