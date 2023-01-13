@@ -294,6 +294,7 @@ public class Graph<T extends Comparable<T>> {
 	while(Q.size() > 0) {
 	    /* Get the queue's head. */
 	    T vID = Q.peek();
+	    T pID = parenthood.get(vID);
 
 	    /* Iterate through the neighbors of the head. */
 	    for (T nID : this.getNeighborsOf(vID)) {
@@ -305,10 +306,10 @@ public class Graph<T extends Comparable<T>> {
 		    explored.add(nID);
 		    parenthood.put(nID, vID);
 		} else {
-		    /* If the neighbor has been explored, at it isn't the
-		     * queue's head, then the graph contains a cycle; it's not a
+		    /* If the neighbor has been explored, and it isn't the
+		     * parent, then the graph contains a cycle; it's not a
 		     * tree. */
-		    if (!nID.equals(vID)) {
+		    if (!nID.equals(pID)) {
 			return false;
 		    }
 		}
@@ -320,7 +321,7 @@ public class Graph<T extends Comparable<T>> {
 
 	/* If there are no cycles, then after a BFS traversal, all the vertices
 	 * must have been explored. */
-	return (explored.size() != this.vertices.size());
+	return (explored.size() == this.order());
     }
 
     /**
