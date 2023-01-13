@@ -345,7 +345,7 @@ public class Graph<T extends Comparable<T>> {
 	    T vID = edge.peekFirst();
 	    T uID = edge.peekLast();
 
-	    parenthood.put(vID, uID);
+	    parenthood.put(uID, vID);
 	}
 
 	/* Get the last explored vertex of the previous BFS traversal. */
