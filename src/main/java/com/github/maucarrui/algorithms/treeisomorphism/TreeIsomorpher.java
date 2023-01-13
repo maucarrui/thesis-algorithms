@@ -39,6 +39,37 @@ public class TreeIsomorpher<U extends Comparable<U>, V extends Comparable<V>> {
     }
 
     /**
+     * Auxiliary method to obtain the structures found on the current level.
+     * @param T the rooted tree.
+     * @param children the map that contains the ordered list of children of the
+     *        vertices on the current level.
+     * @param values the values map, where each structure is associated with an
+     *        unique value.
+     * @param level the current level.
+     * @return a mapping to the structures found on the current level.
+     */
+    private <K extends Comparable<K>> HashMap<K, MultiSet<Integer>>
+	getStructsOnLevel(RootedTree<K> T, HashMap<K, LinkedList<K>> children,
+			  HashMap<K, Integer> values, int level) {
+	/* Define an empty mapping of structures. */
+	HashMap<K, MultiSet<Integer>> structures = new HashMap<>();
+
+	/* Traverse each vertex found on the current level. */
+	for (K v : T.getVerticesOfLevel(level)) {
+	    MultiSet<Integer> struct = new MultiSet<>();
+
+	    /* Build the structure by adding the values of the children. */
+	    for (K child : children.get(v)) {
+		struct.add(values.get(child));
+	    }
+
+	    structures.put(v, struct);
+	}
+
+	return structures;
+    }
+
+    /**
      * Returns whether two rooted trees are isomorphic.
      * @param G on of the rooted trees to the check for isomorphism.
      * @param rootG the root of the rooted tree G.
