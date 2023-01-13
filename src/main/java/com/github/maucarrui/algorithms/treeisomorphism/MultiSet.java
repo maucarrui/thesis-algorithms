@@ -60,6 +60,22 @@ class MultiSet<T extends Comparable<T>> {
     }
 
     /**
+     * Returns the elements of the multiset as a linked list.
+     * @return the elements of the multiset as a linked list.
+     */
+    LinkedList<T> values() {
+	LinkedList<T> vals = new LinkedList<>();
+
+	for (Entry<T, Integer> entry : this.elements.entrySet()) {
+	    for (int i = 0; i < entry.getValue()) {
+		vals.add(entry.getKey());
+	    }
+	}
+
+	return vals;
+    }
+
+    /**
      * Returns the amount of elements contained in the multiset.
      * @return the amount of elements contained in the multiset.
      */
