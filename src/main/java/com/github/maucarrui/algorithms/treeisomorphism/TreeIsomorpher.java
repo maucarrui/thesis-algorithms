@@ -120,6 +120,25 @@ public class TreeIsomorpher<U extends Comparable<U>, V extends Comparable<V>> {
     }
 
     /**
+     * Auxiliary method to update the values of the vertices of the current
+     * level.
+     * @param vertices the set of vertices that have the previous structure.
+     * @param values the values of the vertices.
+     * @param value the value to associate to these vertices.
+     */
+    private <K extends Comparable<K>> void
+	updateValues(HashSet<K> vertices,
+		     HashMap<K, Integer> values,
+		     int value) {
+	/* Traverse the vertices. */
+	for (K vertex : vertices) {
+	    /* In the current level, only the leaves have a value, so if the
+	     * current vertex doesn't have a value, associate one to it. */
+	    if (!values.containsKey(vertex)) { values.put(vertex, value); }
+	}
+    }
+
+    /**
      * Returns whether two rooted trees are isomorphic.
      * @param G on of the rooted trees to the check for isomorphism.
      * @param rootG the root of the rooted tree G.
