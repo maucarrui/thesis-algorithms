@@ -1,6 +1,8 @@
 package com.github.maucarrui.algorithms.treeisomorphism;
 
+import java.util.Map.Entry;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 /**
@@ -67,6 +69,34 @@ public class TreeIsomorpher<U extends Comparable<U>, V extends Comparable<V>> {
 	}
 
 	return structures;
+    }
+
+    /**
+     * Auxiliary method to obtain a mapping that tells which vertices have said
+     * structure.
+     * @param structures the structures mapping.
+     * @return a mapping that tells which vertices have said structure.
+     */
+    private <K extends Comparable<K>> HashMap<MultiSet<Integer>, HashSet<K>>
+	getVerticesOfStructMap(HashMap<K, MultiSet<Integer>> structures) {
+	/* Define an empty mapping of structures to vertices. */
+	HashMap<MultiSet<Integer>, HashSet<K>> verticesOfStruct = new HashMap<>();
+
+	/* Traverse each entry in the map and build the inverse mapping. */
+	for (Entry<K, MultiSet<Integer>> entry : structures.entrySet()) {
+	    K vertex = entry.getKey();
+	    MultiSet<Integer> structure = entry.getValue();
+
+	    if (verticesOfStruct.containsKey(structure)) {
+		verticesOfStruct.get(structure).add(vertex);
+	    } else {
+		HashSet<K> set = new HashSet<>();
+		set.add(vertex);
+		verticesOfStruct.put(structure, set);
+	    }
+	}
+
+	return verticesOfStruct;
     }
 
     /**
