@@ -1,6 +1,7 @@
 package com.github.maucarrui.algorithms.treeisomorphism;
 
 import java.util.Map.Entry;
+import java.util.Iterator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -214,6 +215,51 @@ public class TreeIsomorpher<U extends Comparable<U>, V extends Comparable<V>> {
 	    /* Update the current value as we move to the next structure. */
 	    currentValue++;
 	}
+    }
+
+    /**
+     * Builds an isomorphism of the vertices of T1 onto the vertices of T2.
+     * @param T1 one of the rooted trees.
+     * @param T2 other of the rooted trees.
+     * @param childrenT1 a mapping to the ordered list of children of the
+     *        vertices of the rooted tree T1.
+     * @param childrenT2 a mapping to the ordered list of children of the
+     *        vertices of the rooted tree T2.
+     * @return an isomorphism of the vertices of T1 onto the vertices of T2.
+     */
+    private HashMap<U, V>
+	buildIsomorphism(RootedTree<U> T1,
+			 RootedTree<V> T2,
+			 HashMap<U, LinkedList<U>> childrenT1,
+			 HashMap<V, LinkedList<V>> childrenT2) {
+	/* Define an empty isomorphism. */
+	HashMap<U, V> isomorphism = new HashMap<>();
+
+	/* Perform a DFS traversal at the same time on both trees to build the
+	 * isomorphism. */
+	LinkedList<U> stackT1 = new LinkedList<>();
+	LinkedList<V> stackT2 = new LinkedList<>();
+	while (stackT1.size() > 0) {
+	    /* Get the top of the stacks. */
+	    U u = stackT1.pop();
+	    V v = stackT2.pop();
+
+	    /* Define the isomorphism for the current vertices. */
+	    isomorphism.put(u, v);
+
+	    /* Add the children of the current vertices to the stacks. */
+	    if (childrenT1.containsKey(u)) {
+		Iterator<U> itu = childrenT1.get(u).iterator();
+		Iterator<V> itv = childrenT2.get(v).iterator();
+
+		while (itu.hasNext() && itv.hasNext()) {
+		    stackT1.push(itu.next());
+		    stackT2.push(itv.next());
+		}
+	    }
+	}
+
+	return isomorphism;
     }
 
     /**
