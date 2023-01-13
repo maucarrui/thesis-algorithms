@@ -192,4 +192,48 @@ public class TestGraph {
 	    Assert.assertTrue(G.areConnected(i, i-1));
 	}
     }
+
+    /**
+     * Test the method get BFS edges from the Graph class.
+     */
+    @Test
+    public void testGetBFSEdges() {
+	Graph<Integer> G = new Graph<>();
+
+	/* Create a path from the 0 to 9. */
+	LinkedList<Integer> path = new LinkedList<>();
+	for (int i = 0; i < 10; i++) {
+	    path.add(i);
+	}
+
+	/* Add the path to the graph. */
+	G.addPath(path);
+
+	/* Expected edges obtained from a BFS traversal from the 0. */
+	LinkedList<LinkedList<Integer>> expectedEdges = new LinkedList<>();
+	for (int i = 0; i < 9; i++) {
+	    LinkedList<Integer> edge = new LinkedList<>();
+	    edge.add(i);
+	    edge.add(i+1);
+
+	    expectedEdges.add(edge);
+	}
+
+	/* Check that the obtained edges are correct. */
+	Assert.assertEquals(expectedEdges, G.getBFSEdges(0));
+
+	/* Expected edges obtained from a BFS traversal from the 9. */
+	expectedEdges = new LinkedList<>();
+	for (int i = 9; i > 0; i--) {
+	    LinkedList<Integer> edge = new LinkedList<>();
+	    edge.add(i);
+	    edge.add(i-1);
+
+	    expectedEdges.add(edge);
+	}
+
+	/* Check that the obtained edges are correct. */
+	Assert.assertEquals(expectedEdges, G.getBFSEdges(9));
+    }
+
 }
