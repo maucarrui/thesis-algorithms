@@ -168,6 +168,55 @@ public class TreeIsomorpher<U extends Comparable<U>, V extends Comparable<V>> {
     }
 
     /**
+     * Update the children and values of the current and next level vertices.
+     * @param T1 one of the rooted trees.
+     * @param T2 other of the rooted trees.
+     * @param valuesT1 the values of the vertices of the rooted tree T1.
+     * @param valuesT2 the values of the vertices of the rooted tree T1.
+     * @param childrenT1 the ordered list of children of the vertices of the
+     *        rooted tree T1.
+     * @param childrenT2 the ordered list of children of the vertices of the
+     *        rooted tree T2.
+     * @param vOfStructT1 the map to the set of vertices that have a structure
+     *        on the rooted tree T1.
+     * @param vOfStructT2 the map to the set of vertices that have a structure
+     *        on the rooted tree T2.
+     * @param structuresOfLevel the structures found on the current level.
+     */
+    private void
+	updateInformation(RootedTree<U> T1,
+			  RootedTree<V> T2,
+			  HashMap<U, Integer> valuesT1,
+			  HashMap<V, Integer> valuesT2,
+			  HashMap<U, LinkedList<U>> childrenT1,
+			  HashMap<V, LinkedList<V>> childrenT2,
+			  HashMap<MultiSet<Integer>, HashSet<U>> vOfStructT1,
+			  HashMap<MultiSet<Integer>, HashSet<V>> vOfStructT2,
+			  MultiSet<MultiSet<Integer>> structuresOfLevel) {
+	/* Associate to each structure an unique value, the initial value is 2
+	 * as 1 is reserved for leaves. */
+	int currentValue = 2;
+
+	/* Traverse each structure and associate an unique value to it. */
+	for (MultiSet<Integer> struct : structuresOfLevel.values()) {
+	    /* Get the vertices of T1 and T2 that have said structure. */
+	    HashSet<U> verticesT1 = vOfStructT1.get(struct);
+	    HashSet<V> verticesT2 = vOfStructT2.get(struct);
+
+	    /* Update the values of the previous vertices. */
+	    updateValues(verticesT1, valuesT1, currentValue);
+	    updateValues(verticesT2, valuesT2, currentValue);
+
+	    /* Update the children list of the vertices in the next level. */
+	    updateChildren(T1, verticesT1, childrenT1);
+	    updateChildren(T2, verticesT2, childrenT2);
+
+	    /* Update the current value as we move to the next structure. */
+	    currentValue++;
+	}
+    }
+
+    /**
      * Returns whether two rooted trees are isomorphic.
      * @param G on of the rooted trees to the check for isomorphism.
      * @param rootG the root of the rooted tree G.
