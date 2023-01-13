@@ -346,7 +346,40 @@ public class TreeIsomorpher<U extends Comparable<U>, V extends Comparable<V>> {
      *         not isomorphic it returns null.
      */
     public HashMap<U, V> areIsomorphic(Graph<U> G, U rootG, Graph<V> H, V rootH) {
-	return new HashMap<U, V>();
+	/* Check that both graphs are indeed trees. */
+	if (!G.isTree() || !H.isTree()) { return null; }
+
+	/* Check that both trees have the same order. */
+	if (G.order() != H.order()) { return null; }
+
+	/* Define an empty isomorphism. */
+	HashMap<U, V> isomorphism = new HashMap<>();
+
+	/* If both rooted trees are trivial, return the trivial isomorphism. */
+	if (G.order() == 1) {
+	    isomorphism.put(rootG, rootH);
+	    return isomorphism;
+	}
+
+	/* Properly define the rooted trees. */
+	RootedTree<U> T1 = new RootedTree(G, rootG);
+	RootedTree<V> T2 = new RootedTree(H, rootH);
+	T1.setInitialValues();
+	T2.setInitialValues();
+
+	/* Check that the height of both trees are the same. */
+	if (T1.height() != T2.height()) { return null; }
+
+	/* Check that they have the same amount of vertices in each level. */
+	for (int lvl = 0; lvl <= T1.height(); lvl++) {
+	    int levelSizeT1 = T1.getVerticesOfLevel(lvl).size();
+	    int levelSizeT2 = T2.getVerticesOfLevel(lvl).size();
+
+	    if (levelSizeT1 != levelSizeT2) { return null; }
+	}
+
+	/* Check that all the levels have the same structure. */
+	return this.levelsVerification(T1, T2);
     }
 
 
