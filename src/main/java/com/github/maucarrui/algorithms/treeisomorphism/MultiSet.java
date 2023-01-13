@@ -2,6 +2,7 @@ package com.github.maucarrui.algorithms.treeisomorphism;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.LinkedList;
 
 /**
  * Package-private class to represent a multiset.
@@ -67,7 +68,7 @@ class MultiSet<T extends Comparable<T>> {
 	LinkedList<T> vals = new LinkedList<>();
 
 	for (Entry<T, Integer> entry : this.elements.entrySet()) {
-	    for (int i = 0; i < entry.getValue()) {
+	    for (int i = 0; i < entry.getValue(); i++) {
 		vals.add(entry.getKey());
 	    }
 	}
