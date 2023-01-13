@@ -10,7 +10,7 @@ import java.util.LinkedList;
  * Informally a multiset is simply a set of elements where the repetition of its
  * elements is allowed.
  */
-class MultiSet<T extends Comparable<T>> {
+class MultiSet<T extends Comparable<T>> implements Comparable<MultiSet<T>> {
 
     /** Mapping to keep track of which elements are in the multiset and their
      * amount. */
@@ -133,5 +133,19 @@ class MultiSet<T extends Comparable<T>> {
 	}
 
 	return hash;
+    }
+
+    /**
+     * Compares this multiset with the specified multiset for order.
+     * @return 0 if this multiset is equal to the given, 1 if this multiset has
+     *         greater size, -1 otherwise.
+     */
+    @Override public int compareTo(MultiSet<T> M) {
+	if (this.equals(M)) {
+	    return 0;
+	} else {
+	    if (this.size() < M.size()) { return -1; }
+	    else { return 1; }
+	}
     }
 }
