@@ -98,6 +98,14 @@ public class Graph<T extends Comparable<T>> {
     }
 
     /**
+     * Returns the order of the graph, i.e. the amount of vertices it has.
+     * @return the order of the graph.
+     */
+    public int order() {
+	return this.vertices.size();
+    }
+
+    /**
      * Returns whether the graph contains a vertex whose ID is the given one.
      * @param ID the vertex's ID.
      * @return true if the graph contains a vertex whose ID is the given one,
