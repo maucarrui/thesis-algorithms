@@ -236,4 +236,44 @@ public class TestGraph {
 	Assert.assertEquals(expectedEdges, G.getBFSEdges(9));
     }
 
+    /**
+     * Test the method isTree from the Graph class.
+     */
+    @Test
+    public void testIsTree() {
+	Graph<String> G = new Graph<>();
+
+	/* An empty graph is a tree. */
+	Assert.assertTrue(G.isTree());
+
+	/* A trivial graph is a tree. */
+	G.addVertex("a");
+	Assert.assertTrue(G.isTree());
+
+	/* Two isolated vertices do not conform a tree. */
+	G.addVertex("b");
+	Assert.assertFalse(G.isTree());
+
+	/* When connecting the previous vertices, this produces a tree. */
+	G.connectVertices("a", "b");
+	Assert.assertTrue(G.isTree());
+
+	/* Add another vertex, but do not connect it. */
+	G.addVertex("c");
+	Assert.assertFalse(G.isTree());
+
+	/* Connect the previous vertex. */
+	G.connectVertices("a", "c");
+	Assert.assertTrue(G.isTree());
+
+	/* If we connect b and c, we have a cycle. */
+	G.connectVertices("b", "c");
+	Assert.assertFalse(G.isTree());
+
+	/* If we add another vertex, we still have a cycle. */
+	G.addVertex("d");
+	G.connectVertices("a", "d");
+	Assert.assertFalse(G.isTree());
+    }
+
 }
