@@ -100,6 +100,26 @@ public class TreeIsomorpher<U extends Comparable<U>, V extends Comparable<V>> {
     }
 
     /**
+     * Auxiliary method to group all the structures found on the current level
+     * into a single multiset.
+     * @param structures the structures of the current level.
+     * @return a multiset that contains all the structures found on the current
+     *         level.
+     */
+    private <K extends Comparable<K>> MultiSet<MultiSet<Integer>>
+	groupStructures(HashMap<K, MultiSet<Integer>> structures) {
+	/* Define an empty multiset. */
+	MultiSet<MultiSet<Integer>> structuresOfLevel = new MultiSet<>();
+
+	/* Traverse each structure and add it to the multiset. */
+	for (MultiSet<Integer> struct : structures.values()) {
+	    structuresOfLevel.add(struct);
+	}
+
+	return structuresOfLevel;
+    }
+
+    /**
      * Returns whether two rooted trees are isomorphic.
      * @param G on of the rooted trees to the check for isomorphism.
      * @param rootG the root of the rooted tree G.
