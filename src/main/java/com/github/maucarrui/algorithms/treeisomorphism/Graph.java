@@ -288,7 +288,63 @@ public class Graph<T extends Comparable<T>> {
 	/* If there are no cycles, then after a BFS traversal, all the vertices
 	 * must have been explored. */
 	return (explored.size() != this.vertices.size());
+    }
 
+    /**
+     * Returns the center or centers of the current tree (this is supposing the
+     * current graph is a tree).
+     * @return the center or centers of the current tree.
+     */
+    public HashSet<T> getCentersOfTree() {
+	/* Set a random vertex of the graph as a root. */
+	T rootID = this.elements.peek();
+
+	/* Get the last vertex explored by doing a BFS traversal from the
+	 * root. */
+	LinkedList<LinkedList<T>> edges = this.getBFSEdges(rootID);
+	T xID = edges.peekLast().peekLast();
+
+	/* Do a BFS traversal from the new vertex x. */
+	HashMap<T, T> parenthood = new HashMap<>();
+	edges = this.getBFSEdges(xID);
+	for (LinkedList<T> edge : edges) {
+	    T vID = edge.peekFirst();
+	    T uID = edge.peekLast();
+
+	    parenthood.put(vID, uID);
+	}
+
+	/* Get the last explored vertex of the previous BFS traversal. */
+	T yID = edges.peekLast().peekLast();
+
+	/* Build an xy-path using the parenthood mapping previously defined. */
+	LinkedList<T> path = new LinkedList<>();
+	T currentID = yID;
+	while (currentID != null) {
+	    path.add(currentID);
+	    currentID = parenthood.get(currentID);
+	}
+
+	/* Return the centers of the tree. */
+	int length = path.size();
+	HashSet<T> centers = new HashSet<>();
+	if (length % 2 == 0) {
+	    /* If the xy-path is of length even, then the vertices found on the
+	     * (n/2)-th and ((n/2)-1)-th position are the centers of the
+	     * tree. */
+	    T cu = path.get(length / 2);
+	    T cv = path.get((length / 2) - 1);
+
+	    centers.add(cu);
+	    centers.add(cv);
+	} else {
+	    /* If the xy-path is of length odd, then the vertex found on the
+	     * ((n-1)/2)-th position is the center of the tree. */
+	    T cv = path.get(((length - 1)/2));
+	    centers.add(cv);
+	}
+
+	return centers;
     }
 
 }
