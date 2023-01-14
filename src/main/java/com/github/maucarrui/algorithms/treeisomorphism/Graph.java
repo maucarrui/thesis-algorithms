@@ -377,7 +377,6 @@ public class Graph<T> {
 
 	/* Return the centers of the tree. */
 	int length = path.size();
-	HashSet<T> centers = new HashSet<>();
 	if (length % 2 == 0) {
 	    /* If the xy-path is of length even, then the vertices found on the
 	     * (n/2)-th and ((n/2)-1)-th position are the centers of the

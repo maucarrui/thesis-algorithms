@@ -215,4 +215,43 @@ public class TestTreeIsomorpher {
 	    Assert.assertTrue(isValidIsomorphism(G, H, isomorphism));
 	}
     }
+
+    /**
+     * Test the areIsomorphic method with some trivial graphs.
+     */
+    @Test
+    public void testAreIsomorphicTrivialCases() {
+	/* Define a tree isomorpher to have access to its methods. */
+	TreeIsomorpher<Integer, String> TI = new TreeIsomorpher<>();
+	HashMap<Integer, String> isomorphism, expectedIsomorphism;
+
+	/* Test for two empty graphs. */
+	Graph<Integer> G = new Graph<>();
+	Graph<String> H = new Graph<>();
+	
+	/* The expected isomorphism is an empty isomorphism. */
+	isomorphism = TI.areIsomorphic(G, H);
+	Assert.assertEquals(isomorphism, new HashMap<Integer, String>());
+
+	/* Add a vertex and obtain some trivial graphs. */
+	G.addVertex(0);
+	H.addVertex("a");
+
+	expectedIsomorphism = new HashMap<Integer, String>();
+	expectedIsomorphism.put(0, "a");
+
+	isomorphism = TI.areIsomorphic(G, H);
+	Assert.assertEquals(expectedIsomorphism, isomorphism);
+
+	/* Add another vertex and the trees should not be isomorphic. */
+	G.addVertex(1);
+	isomorphism = TI.areIsomorphic(G, H);
+	Assert.assertNull(isomorphism);
+
+	/* Connect the previous vertex, and the trees should still be not
+	 * isomorphic. */
+	G.connectVertices(0, 1);
+	isomorphism = TI.areIsomorphic(G, H);
+	Assert.assertNull(isomorphism);
+    }
 }
