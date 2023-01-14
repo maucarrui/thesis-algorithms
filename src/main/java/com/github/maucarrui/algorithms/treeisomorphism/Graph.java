@@ -115,6 +115,14 @@ public class Graph<T> {
     }
 
     /**
+     * Returns the vertices contained in the graph.
+     * @return the vertices contained in the graph.
+     */
+    public HashSet<T> vertices() {
+	return new HashSet<T>(this.vertices.keySet());
+    }
+
+    /**
      * Returns whether the graph contains a vertex whose ID is the given one.
      * @param ID the vertex's ID.
      * @return true if the graph contains a vertex whose ID is the given one,
