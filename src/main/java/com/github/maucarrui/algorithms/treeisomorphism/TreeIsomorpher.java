@@ -61,9 +61,12 @@ public class TreeIsomorpher<U, V> {
 	for (K v : T.getVerticesOfLevel(level)) {
 	    MultiSet<Integer> struct = new MultiSet<>();
 
-	    /* Build the structure by adding the values of the children. */
-	    for (K child : children.get(v)) {
-		struct.add(values.get(child));
+	    /* If the current vertex has children, build its structure by adding
+	     * the values of the children. */
+	    if (children.containsKey(v)) {
+		for (K child : children.get(v)) {
+		    struct.add(values.get(child));
+		}
 	    }
 
 	    structures.put(v, struct);
