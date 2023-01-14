@@ -338,6 +338,14 @@ public class Graph<T> {
      * @return the center or centers of the current tree.
      */
     public HashSet<T> getCentersOfTree() {
+	HashSet<T> centers = new HashSet<>();
+
+	/* If the tree only has one vertex, return said vertex. */
+	if (this.order() == 1) {
+	    centers.add(this.elements.peek());
+	    return centers;
+	}
+
 	/* Set a random vertex of the graph as a root. */
 	T rootID = this.elements.peek();
 
