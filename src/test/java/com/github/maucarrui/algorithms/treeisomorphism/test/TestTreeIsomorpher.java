@@ -120,5 +120,27 @@ public class TestTreeIsomorpher {
 	/* Check that the obtained isomorphism is correct. */
 	isomorphism = TI.areIsomorphic(G, 0, H, "a");
 	Assert.assertEquals(expectedIsomorphism, isomorphism);
+
+	/* Mirror one graph. */
+	H = new Graph<>();
+	H.addVertex("a"); H.addVertex("b"); H.addVertex("c"); H.addVertex("d");
+	H.addVertex("e"); H.addVertex("f"); H.addVertex("g");
+	H.connectVertices("a", "b"); H.connectVertices("a", "c");
+	H.connectVertices("a", "d"); H.connectVertices("b", "e");
+	H.connectVertices("c", "f"); H.connectVertices("f", "g");
+
+	/* The expected isomorphism. */
+	expectedIsomorphism = new HashMap<>();
+	expectedIsomorphism.put(0, "a");
+	expectedIsomorphism.put(1, "d");
+	expectedIsomorphism.put(2, "b");
+	expectedIsomorphism.put(3, "c");
+	expectedIsomorphism.put(4, "e");
+	expectedIsomorphism.put(5, "f");
+	expectedIsomorphism.put(6, "g");
+
+	/* Check that the obtained isomorphism is correct. */
+	isomorphism = TI.areIsomorphic(G, 0, H, "a");
+	Assert.assertEquals(expectedIsomorphism, isomorphism);
     }
 }
