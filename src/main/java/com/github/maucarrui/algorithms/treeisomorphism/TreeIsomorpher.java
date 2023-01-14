@@ -27,7 +27,7 @@ public class TreeIsomorpher<U, V> {
      * @param children the mapping of the ordered children.
      */
     private <K> void
-	setInitialChildren(RootedTree<K> T, HashMap<K, LinkedList<K>> children) {
+    setInitialChildren(RootedTree<K> T, HashMap<K, LinkedList<K>> children) {
 	for (K leaf : T.getVerticesOfLevel(0)) {
 	    K parent = T.getParent(leaf);
 
@@ -52,8 +52,8 @@ public class TreeIsomorpher<U, V> {
      * @return a mapping to the structures found on the current level.
      */
     private <K> HashMap<K, MultiSet<Integer>>
-	getStructsOnLevel(RootedTree<K> T, HashMap<K, LinkedList<K>> children,
-			  HashMap<K, Integer> values, int level) {
+    getStructsOnLevel(RootedTree<K> T, HashMap<K, LinkedList<K>> children,
+		      HashMap<K, Integer> values, int level) {
 	/* Define an empty mapping of structures. */
 	HashMap<K, MultiSet<Integer>> structures = new HashMap<>();
 
@@ -79,7 +79,7 @@ public class TreeIsomorpher<U, V> {
      * @return a mapping that tells which vertices have said structure.
      */
     private <K> HashMap<MultiSet<Integer>, HashSet<K>>
-	getVerticesOfStructMap(HashMap<K, MultiSet<Integer>> structures) {
+    getVerticesOfStructMap(HashMap<K, MultiSet<Integer>> structures) {
 	/* Define an empty mapping of structures to vertices. */
 	HashMap<MultiSet<Integer>, HashSet<K>> verticesOfStruct = new HashMap<>();
 
@@ -108,7 +108,7 @@ public class TreeIsomorpher<U, V> {
      *         level.
      */
     private <K> MultiSet<MultiSet<Integer>>
-	groupStructures(HashMap<K, MultiSet<Integer>> structures) {
+    groupStructures(HashMap<K, MultiSet<Integer>> structures) {
 	/* Define an empty multiset. */
 	MultiSet<MultiSet<Integer>> structuresOfLevel = new MultiSet<>();
 
@@ -128,9 +128,7 @@ public class TreeIsomorpher<U, V> {
      * @param value the value to associate to these vertices.
      */
     private <K> void
-	updateValues(HashSet<K> vertices,
-		     HashMap<K, Integer> values,
-		     int value) {
+    updateValues(HashSet<K> vertices, HashMap<K, Integer> values, int value) {
 	/* Traverse the vertices. */
 	for (K vertex : vertices) {
 	    /* In the current level, only the leaves have a value, so if the
@@ -148,9 +146,8 @@ public class TreeIsomorpher<U, V> {
      * @param children the children mapping.
      */
     private <K> void
-	updateChildren(RootedTree<K> T,
-		       HashSet<K> vertices,
-		       HashMap<K, LinkedList<K>> children) {
+    updateChildren(RootedTree<K> T, HashSet<K> vertices,
+		   HashMap<K, LinkedList<K>> children) {
 	/* Traverse each vertex. */
 	for (K vertex : vertices) {
 	    /* Get the parent of the current vertex. */
@@ -185,15 +182,14 @@ public class TreeIsomorpher<U, V> {
      * @param structuresOfLevel the structures found on the current level.
      */
     private void
-	updateInformation(RootedTree<U> T1,
-			  RootedTree<V> T2,
-			  HashMap<U, Integer> valuesT1,
-			  HashMap<V, Integer> valuesT2,
-			  HashMap<U, LinkedList<U>> childrenT1,
-			  HashMap<V, LinkedList<V>> childrenT2,
-			  HashMap<MultiSet<Integer>, HashSet<U>> vOfStructT1,
-			  HashMap<MultiSet<Integer>, HashSet<V>> vOfStructT2,
-			  MultiSet<MultiSet<Integer>> structuresOfLevel) {
+    updateInformation(RootedTree<U> T1, RootedTree<V> T2,
+		      HashMap<U, Integer> valuesT1,
+		      HashMap<V, Integer> valuesT2,
+		      HashMap<U, LinkedList<U>> childrenT1,
+		      HashMap<V, LinkedList<V>> childrenT2,
+		      HashMap<MultiSet<Integer>, HashSet<U>> vOfStructT1,
+		      HashMap<MultiSet<Integer>, HashSet<V>> vOfStructT2,
+		      MultiSet<MultiSet<Integer>> structuresOfLevel) {
 	/* Associate to each structure an unique value, the initial value is 2
 	 * as 1 is reserved for leaves. */
 	int currentValue = 2;
@@ -228,10 +224,9 @@ public class TreeIsomorpher<U, V> {
      * @return an isomorphism of the vertices of T1 onto the vertices of T2.
      */
     private HashMap<U, V>
-	buildIsomorphism(RootedTree<U> T1,
-			 RootedTree<V> T2,
-			 HashMap<U, LinkedList<U>> childrenT1,
-			 HashMap<V, LinkedList<V>> childrenT2) {
+    buildIsomorphism(RootedTree<U> T1, RootedTree<V> T2,
+		     HashMap<U, LinkedList<U>> childrenT1,
+		     HashMap<V, LinkedList<V>> childrenT2) {
 	/* Define an empty isomorphism. */
 	HashMap<U, V> isomorphism = new HashMap<>();
 
@@ -272,7 +267,7 @@ public class TreeIsomorpher<U, V> {
      *         not isomorphic it returns null.
      */
     private HashMap<U, V>
-	levelsVerification(RootedTree<U> T1, RootedTree<V> T2) {
+    levelsVerification(RootedTree<U> T1, RootedTree<V> T2) {
 	/* Define a mapping for the values associated with a structure of a
 	 * vertex */
 	HashMap<U, Integer> valuesT1 = new HashMap<>();
@@ -345,7 +340,8 @@ public class TreeIsomorpher<U, V> {
      * @return the isomorphism between the two rooted trees, if the trees are
      *         not isomorphic it returns null.
      */
-    public HashMap<U, V> areIsomorphic(Graph<U> G, U rootG, Graph<V> H, V rootH) {
+    public HashMap<U, V>
+    areIsomorphic(Graph<U> G, U rootG, Graph<V> H, V rootH) {
 	/* Check that both graphs are indeed trees. */
 	if (!G.isTree() || !H.isTree()) { return null; }
 
