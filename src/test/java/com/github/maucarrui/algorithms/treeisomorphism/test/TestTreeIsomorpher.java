@@ -228,7 +228,7 @@ public class TestTreeIsomorpher {
 	/* Test for two empty graphs. */
 	Graph<Integer> G = new Graph<>();
 	Graph<String> H = new Graph<>();
-	
+
 	/* The expected isomorphism is an empty isomorphism. */
 	isomorphism = TI.areIsomorphic(G, H);
 	Assert.assertEquals(isomorphism, new HashMap<Integer, String>());
@@ -253,5 +253,95 @@ public class TestTreeIsomorpher {
 	G.connectVertices(0, 1);
 	isomorphism = TI.areIsomorphic(G, H);
 	Assert.assertNull(isomorphism);
+    }
+
+    /**
+     * Test the areIsomorphic method with some small hardcoded graphs.
+     */
+    @Test
+    public void testAreIsomorphicHardcodedSmall() {
+	/* Define a tree isomorpher to have access to its methods. */
+	TreeIsomorpher<Integer, String> TI = new TreeIsomorpher<>();
+	HashMap<Integer, String> iso;
+
+	/* Test for two P2 (graphs that consist only of a path with 2
+	 * vertices). */
+	Graph<Integer> G = new Graph<>();
+	Graph<String> H = new Graph<>();
+	G.addVertex(0); G.addVertex(1); G.connectVertices(0, 1);
+	H.addVertex("a"); H.addVertex("b"); H.connectVertices("a", "b");
+
+	/* The possible expected isomorphism of the rooted trees. */
+	HashMap<Integer, String> expIso1 = new HashMap<Integer, String>();
+	expIso1.put(0, "a");
+	expIso1.put(1, "b");
+
+	HashMap<Integer, String> expIso2 = new HashMap<Integer, String>();
+	expIso2.put(0, "b");
+	expIso2.put(1, "a");
+
+	/* Check that the obtained isomorphism is correct. */
+	iso = TI.areIsomorphic(G, H);
+	Assert.assertTrue(iso.equals(expIso1) || iso.equals(expIso2));
+    }
+
+    /**
+     * Test the areIsomorphic method with some hardcoded graphs.
+     */
+    @Test
+    public void testAreIsomorphicHardcoded() {
+	/* Define a tree isomorpher to have access to its method. */
+	TreeIsomorpher<String, String> TI = new TreeIsomorpher<>();
+	HashMap<String, String> isomorphism;
+
+	/* Hardcoded graphs. */
+	Graph<String> G = new Graph<>();
+	Graph<String> H = new Graph<>();
+
+	G.addVertex("v0"); G.addVertex("v1"); G.addVertex("v2");
+	G.addVertex("v3"); G.addVertex("v4"); G.addVertex("v5");
+	G.addVertex("v6"); G.addVertex("v7"); G.addVertex("v8");
+
+	H.addVertex("u0"); H.addVertex("u1"); H.addVertex("u2");
+	H.addVertex("u3"); H.addVertex("u4"); H.addVertex("u5");
+	H.addVertex("u6"); H.addVertex("u7"); H.addVertex("u8");
+
+	G.connectVertices("v0", "v1"); G.connectVertices("v1", "v3");
+	G.connectVertices("v3", "v2"); G.connectVertices("v3", "v4");
+	G.connectVertices("v3", "v5"); G.connectVertices("v5", "v6");
+	G.connectVertices("v6", "v7"); G.connectVertices("v7", "v8");
+
+	H.connectVertices("u0", "u1"); H.connectVertices("u1", "u2");
+	H.connectVertices("u2", "u3"); H.connectVertices("u3", "u4");
+	H.connectVertices("u4", "u5"); H.connectVertices("u4", "u6");
+	H.connectVertices("u4", "u7"); H.connectVertices("u7", "u8");
+
+	/* Check that the obtained isomorphism is correct. */
+	isomorphism = TI.areIsomorphic(G, H);
+	Assert.assertTrue(isValidIsomorphism(G, H, isomorphism));
+    }
+
+    /**
+     * Test the areIsomorphic method with some pinwheel graphs that only have
+     * one isomorphism.
+     */
+    @Test
+    public void testAreIsomorphicPinwheel() {
+	/* Define a tree isomorpher to have access to its method. */
+	TreeIsomorpher<Integer, Integer> TI = new TreeIsomorpher<>();
+	HashMap<Integer, Integer> isomorphism;
+
+	/* Number of branches to test. */
+	int maxBranches = 10;
+
+	for (int i = 0; i < maxBranches; i++) {
+	    /* Define two identic pinwheel graphs. */
+	    Graph<Integer> G = pinwheelGraph(i);
+	    Graph<Integer> H = pinwheelGraph(i);
+
+	    /* Obtain the isomorphism between the graphs. */
+	    isomorphism = TI.areIsomorphic(G, H);
+	    Assert.assertTrue(isValidIsomorphism(G, H, isomorphism));
+	}
     }
 }
