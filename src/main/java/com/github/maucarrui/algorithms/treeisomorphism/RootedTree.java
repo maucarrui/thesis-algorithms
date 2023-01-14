@@ -12,7 +12,7 @@ import java.util.LinkedList;
  * is the root; in other words, the edges have an orientation. Thus, for any
  * vertex v in the set of vertices of T, there exists an unique rv-path.
  */
-class RootedTree<T extends Comparable<T>> {
+class RootedTree<T> {
 
     /** The graph corresponding to the rooted tree. */
     private Graph<T> tree;

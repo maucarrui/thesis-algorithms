@@ -12,7 +12,7 @@ import java.util.LinkedList;
  * A tree isomorpher is capable of telling if two rooted trees are isomorphic,
  * and if so, return an isomorphism between the two.
  */
-public class TreeIsomorpher<U extends Comparable<U>, V extends Comparable<V>> {
+public class TreeIsomorpher<U, V> {
 
     /**
      * Unique empty constructor to initialize a tree isomorpher and have access
@@ -26,7 +26,7 @@ public class TreeIsomorpher<U extends Comparable<U>, V extends Comparable<V>> {
      * @param T the rooted tree.
      * @param children the mapping of the ordered children.
      */
-    private <K extends Comparable<K>> void
+    private <K> void
 	setInitialChildren(RootedTree<K> T, HashMap<K, LinkedList<K>> children) {
 	for (K leaf : T.getVerticesOfLevel(0)) {
 	    K parent = T.getParent(leaf);
@@ -51,7 +51,7 @@ public class TreeIsomorpher<U extends Comparable<U>, V extends Comparable<V>> {
      * @param level the current level.
      * @return a mapping to the structures found on the current level.
      */
-    private <K extends Comparable<K>> HashMap<K, MultiSet<Integer>>
+    private <K> HashMap<K, MultiSet<Integer>>
 	getStructsOnLevel(RootedTree<K> T, HashMap<K, LinkedList<K>> children,
 			  HashMap<K, Integer> values, int level) {
 	/* Define an empty mapping of structures. */
@@ -78,7 +78,7 @@ public class TreeIsomorpher<U extends Comparable<U>, V extends Comparable<V>> {
      * @param structures the structures mapping.
      * @return a mapping that tells which vertices have said structure.
      */
-    private <K extends Comparable<K>> HashMap<MultiSet<Integer>, HashSet<K>>
+    private <K> HashMap<MultiSet<Integer>, HashSet<K>>
 	getVerticesOfStructMap(HashMap<K, MultiSet<Integer>> structures) {
 	/* Define an empty mapping of structures to vertices. */
 	HashMap<MultiSet<Integer>, HashSet<K>> verticesOfStruct = new HashMap<>();
@@ -107,7 +107,7 @@ public class TreeIsomorpher<U extends Comparable<U>, V extends Comparable<V>> {
      * @return a multiset that contains all the structures found on the current
      *         level.
      */
-    private <K extends Comparable<K>> MultiSet<MultiSet<Integer>>
+    private <K> MultiSet<MultiSet<Integer>>
 	groupStructures(HashMap<K, MultiSet<Integer>> structures) {
 	/* Define an empty multiset. */
 	MultiSet<MultiSet<Integer>> structuresOfLevel = new MultiSet<>();
@@ -127,7 +127,7 @@ public class TreeIsomorpher<U extends Comparable<U>, V extends Comparable<V>> {
      * @param values the values of the vertices.
      * @param value the value to associate to these vertices.
      */
-    private <K extends Comparable<K>> void
+    private <K> void
 	updateValues(HashSet<K> vertices,
 		     HashMap<K, Integer> values,
 		     int value) {
@@ -147,7 +147,7 @@ public class TreeIsomorpher<U extends Comparable<U>, V extends Comparable<V>> {
      *        next level on the rooted tree.
      * @param children the children mapping.
      */
-    private <K extends Comparable<K>> void
+    private <K> void
 	updateChildren(RootedTree<K> T,
 		       HashSet<K> vertices,
 		       HashMap<K, LinkedList<K>> children) {
