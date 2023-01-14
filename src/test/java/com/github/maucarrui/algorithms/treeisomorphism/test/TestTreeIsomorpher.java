@@ -143,4 +143,76 @@ public class TestTreeIsomorpher {
 	isomorphism = TI.areIsomorphic(G, 0, H, "a");
 	Assert.assertEquals(expectedIsomorphism, isomorphism);
     }
+
+    /**
+     * Auxiliary method to build a pinwheel graph, which has only one
+     * isomorphism.
+     * @param numBranches the amount of branches the graph has.
+     */
+    private Graph<Integer> pinwheelGraph(int numBranches) {
+	Graph<Integer> pinwheel = new Graph<>();
+	pinwheel.addVertex(0);
+
+	for (int i = 0; i < numBranches; i++) {
+	    LinkedList<Integer> path = new LinkedList<>();
+	    path.add(0);
+
+	    for (int j = pinwheel.order(); j < 2 * pinwheel.order(); j++) {
+		path.add(j);
+	    }
+
+	    pinwheel.addPath(path);
+	}
+
+	return pinwheel;
+    }
+
+    /**
+     * Auxiliary method to check if an isomorphism is valid.
+     */
+    private <U, V> boolean
+    isValidIsomorphism(Graph<U> G, Graph<V> H, HashMap<U, V> isomorphism) {
+	/* Check that the isomorphism keeps adjacencies and non-adjacencies. */
+	for (U u : G.vertices()) {
+	    /* Get the vertex of H which maps u. */
+	    V fu = isomorphism.get(u);
+
+	    for (U v : G.vertices()) {
+		/* Get the vertex of H which maps u. */
+		V fv = isomorphism.get(v);
+
+		if (G.areConnected(u, v) && !H.areConnected(fu, fv)) {
+		    return false;
+		} else if (!G.areConnected(u, v) && H.areConnected(fu, fv)) {
+		    return false;
+		}
+	    }
+	}
+
+	return true;
+    }
+
+    /**
+     * Test the areIsomorphic method with some pinwheel graphs as rooted trees
+     * that only have one isomorphism.
+     */
+    @Test
+    public void testAreIsomorphicRootedPinwheel() {
+	/* Define a tree isomorpher to have access to its method. */
+	TreeIsomorpher<Integer, Integer> TI = new TreeIsomorpher<>();
+	HashMap<Integer, Integer> isomorphism;
+
+	/* Number of branches to test. */
+	int maxBranches = 10;
+
+	for (int i = 0; i < maxBranches; i++) {
+	    /* Define two identic pinwheel graphs. */
+	    Graph<Integer> G = pinwheelGraph(i);
+	    Graph<Integer> H = pinwheelGraph(i);
+
+	    /* Obtain the isomorphism between the graphs. */
+	    isomorphism = TI.areIsomorphic(G, 0, H, 0);
+	    Assert.assertTrue(isValidIsomorphism(G, H, isomorphism));
+	}
+    }
 }
