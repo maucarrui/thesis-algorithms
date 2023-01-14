@@ -234,6 +234,9 @@ public class TreeIsomorpher<U, V> {
 	 * isomorphism. */
 	LinkedList<U> stackT1 = new LinkedList<>();
 	LinkedList<V> stackT2 = new LinkedList<>();
+	stackT1.push(T1.root());
+	stackT2.push(T2.root());
+
 	while (stackT1.size() > 0) {
 	    /* Get the top of the stacks. */
 	    U u = stackT1.pop();
