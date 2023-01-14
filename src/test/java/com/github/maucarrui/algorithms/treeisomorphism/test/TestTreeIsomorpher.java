@@ -79,4 +79,46 @@ public class TestTreeIsomorpher {
 	isomorphism = TI.areIsomorphic(G, 0, H, "a");
 	Assert.assertEquals(expectedIsomorphism, isomorphism);
     }
+
+    /**
+     * Test the areIsomorphic method with some hardcoded graphs as rooted trees
+     * that only have one isomorphism.
+     */
+    @Test
+    public void testAreIsomorphicRootedHardcodedSingleIsomorphism() {
+	/* Define a tree isomorpher to have access to its method. */
+	TreeIsomorpher<Integer, String> TI = new TreeIsomorpher<>();
+	HashMap<Integer, String> isomorphism, expectedIsomorphism;
+
+	/* Hardcoded graphs. */
+	Graph<Integer> G = new Graph<>();
+	Graph<String> H = new Graph<>();
+
+	G.addVertex(0); G.addVertex(1); G.addVertex(2); G.addVertex(3);
+	G.addVertex(4); G.addVertex(5); G.addVertex(6);
+	H.addVertex("a"); H.addVertex("b"); H.addVertex("c"); H.addVertex("d");
+	H.addVertex("e"); H.addVertex("f"); H.addVertex("g");
+
+	G.connectVertices(0, 1); G.connectVertices(0, 2);
+	G.connectVertices(0, 3); G.connectVertices(2, 4);
+	G.connectVertices(3, 5); G.connectVertices(5, 6);
+
+	H.connectVertices("a", "b"); H.connectVertices("a", "c");
+	H.connectVertices("a", "d"); H.connectVertices("c", "e");
+	H.connectVertices("d", "f"); H.connectVertices("f", "g");
+
+	/* The expected isomorphism. */
+	expectedIsomorphism = new HashMap<>();
+	expectedIsomorphism.put(0, "a");
+	expectedIsomorphism.put(1, "b");
+	expectedIsomorphism.put(2, "c");
+	expectedIsomorphism.put(3, "d");
+	expectedIsomorphism.put(4, "e");
+	expectedIsomorphism.put(5, "f");
+	expectedIsomorphism.put(6, "g");
+
+	/* Check that the obtained isomorphism is correct. */
+	isomorphism = TI.areIsomorphic(G, 0, H, "a");
+	Assert.assertEquals(expectedIsomorphism, isomorphism);
+    }
 }
