@@ -28,7 +28,7 @@ if __name__ == "__main__":
         df = pd.read_csv(file_name)
 
         # Build a plot that contains the values.
-        plt.plot(df["Size"], df["Time"])
+        plt.plot(df["Size"], df["Time"], marker="o")
 
         # Set the title and labels.
         plt.title(plot_title)
