@@ -148,6 +148,7 @@ public class TestTreeIsomorpher {
      * Auxiliary method to build a pinwheel graph, which has only one
      * isomorphism.
      * @param numBranches the amount of branches the graph has.
+     * @return the pinwheel graph.
      */
     private Graph<Integer> pinwheelGraph(int numBranches) {
 	Graph<Integer> pinwheel = new Graph<>();
