@@ -102,7 +102,7 @@ The program should compile with no errors executing the following command:
 $ mvn compile
 ```
 
-To run the unit tests run the following:
+To run the unit tests execute the following:
 
 ```
 $ mvn test
